@@ -5,9 +5,9 @@ import re
 #####               FUNCTIONS                 #####
 ###################################################
 
-# get all non-null lines into a list
-# ==================================
-
+# <summary>
+# Parses each line into a list element. Empty lines and .IPPcode24 line are ignored.
+# </summary>
 def ParseLinesToList():
     lineList = []
 
@@ -21,9 +21,17 @@ def ParseLinesToList():
     return lineList
 
 
+def
+
+
 ###################################################
 #####                  MAIN                   #####
 ###################################################
 
 lineList = ParseLinesToList()
+
+print(lineList)
+
+lineList = 
+
 print(lineList)
