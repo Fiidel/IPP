@@ -39,7 +39,8 @@ def ParseLinesToList():
     lineList = []
 
     for line in sys.stdin:
-        if re.search(r"^[\s]", line) == None:
+        # if a line isn't just whitespace
+        if re.search(r"^\s*$", line) == None:
             line = line.strip()
             line = RemoveCommentsFromLine(line)
             if line != "":
