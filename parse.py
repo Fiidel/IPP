@@ -62,19 +62,48 @@ def RemoveCommentsFromLine(line):
     return line
 
 
+# <summary>
+# Parses each line into its parts - instruction and arguments.
+# </summary>
+def ParseLinesToInstructionElements(lineList, iList):
+    for line in lineList:
+        # parse individual lines into instructions and arguments and insert them into InstructionList
+        # use regex for whitespace
+        instructionParts = line.split()
+        iList.InsertNextInstruction(instructionParts[0], *instructionParts[1:])
+    return iList
+
+
+###################################################
+#####            DEBUG FUNCTIONS              #####
+###################################################
+
+# <summary>
+# Prints all instruction elements in a list.
+# </summary>
+def Debug_PrintInstructionList(iList):
+    instruction = iList.head
+    instructionNumber = 1
+    while instruction != None:
+        print(f"--- INSTRUCTION {instructionNumber} ---")
+        print(instruction.opcode)
+        print(instruction.arg1)
+        print(instruction.arg2)
+        print(instruction.arg3)
+        print("")
+        instructionNumber += 1
+        instruction = instruction.next
+
+
 ###################################################
 #####                  MAIN                   #####
 ###################################################
 
 lineList = ParseLinesToList()
-# print(lineList)
 
-### INSTRUCTION LIST TESTS
-# iList = InstructionList()
-# iList.InsertNextInstruction("LABEL", "loopStart")
+iList = InstructionList()
+iList = ParseLinesToInstructionElements(lineList, iList)
 
-# print("printing first instruction:")
-# print(iList.head.opcode)
-# print(iList.head.arg1)
-# print(iList.head.arg2)
-# print(iList.head.arg3)
+
+# DEBUG
+# Debug_PrintInstructionList(iList)
