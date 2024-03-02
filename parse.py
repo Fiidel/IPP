@@ -1,5 +1,7 @@
 import sys
 import re
+from xml.dom import minidom as md
+
 
 ###################################################
 #####                CLASSES                  #####
@@ -74,6 +76,22 @@ def ParseLinesToInstructionElements(lineList, iList):
     return iList
 
 
+# <summary>
+# Parses the instruction list to an XML format.
+# </summary>
+def GenerateXML(iList):
+    #XML head: <?xml version="1.0" encoding="UTF-8"?>
+    
+    xml = md.Document()
+    program = xml.createElement("program")
+    xml.appendChild(program)
+    
+    testChild = xml.createElement("instruction")
+    program.appendChild(testChild)
+    
+    xml.writexml(sys.stdout, indent="", addindent="\t", encoding="UTF-8", newl="\n")
+
+
 ###################################################
 #####            DEBUG FUNCTIONS              #####
 ###################################################
@@ -103,7 +121,7 @@ lineList = ParseLinesToList()
 
 iList = InstructionList()
 iList = ParseLinesToInstructionElements(lineList, iList)
-
-
-# DEBUG
+# DEBUG:
 # Debug_PrintInstructionList(iList)
+
+GenerateXML(iList)
