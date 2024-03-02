@@ -41,11 +41,24 @@ def ParseLinesToList():
     for line in sys.stdin:
         if re.search(r"^[\s]", line) == None:
             line = line.strip()
-            lineList.append(line)
+            line = RemoveCommentsFromLine(line)
+            if line != "":
+                lineList.append(line)
 
     # remove useless .IPPcode24 intro
     lineList.remove(".IPPcode24")
     return lineList
+
+
+# <summary>
+# Removes # comments from a given line.
+# </summary>
+def RemoveCommentsFromLine(line):
+    comment = re.search(r"[#](.*)", line)
+    if comment != None:
+        line = line.replace(comment[0], "")
+        line = line.strip()
+    return line
 
 
 ###################################################
@@ -53,7 +66,7 @@ def ParseLinesToList():
 ###################################################
 
 lineList = ParseLinesToList()
-
+# print(lineList)
 
 ### INSTRUCTION LIST TESTS
 # iList = InstructionList()
