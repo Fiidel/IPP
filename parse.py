@@ -82,12 +82,48 @@ def ParseLinesToInstructionElements(lineList, iList):
 def GenerateXML(iList):
     #XML head: <?xml version="1.0" encoding="UTF-8"?>
     
+    # create xml document and add root program element
     xml = md.Document()
     program = xml.createElement("program")
+    program.setAttribute("language", "IPPcode24")
     xml.appendChild(program)
     
-    testChild = xml.createElement("instruction")
-    program.appendChild(testChild)
+    # add all instructions from list to element
+    currentInstruction = iList.head
+    instructionNumber = 1
+    while currentInstruction != None:
+        instructionXML = xml.createElement("instruction")
+        instructionXML.setAttribute("order", str(instructionNumber))
+        instructionXML.setAttribute("opcode", currentInstruction.opcode.upper())
+        # handle args
+        # TODO: parse arguments into type and value (type is mandatory with every argument)
+        if currentInstruction.arg1 != None:
+            arg = xml.createElement("arg1")
+            arg.setAttribute("type", currentInstruction.arg1)
+            argValue = xml.createTextNode(currentInstruction.arg1)
+            arg.appendChild(argValue)
+            instructionXML.appendChild(arg)
+            
+            if currentInstruction.arg2 != None:
+                arg = xml.createElement("arg2")
+                arg.setAttribute("type", currentInstruction.arg2)
+                argValue = xml.createTextNode(currentInstruction.arg2)
+                arg.appendChild(argValue)
+                instructionXML.appendChild(arg)
+                pass
+            
+                if currentInstruction.arg3 != None:
+                    arg = xml.createElement("arg3")
+                    arg.setAttribute("type", currentInstruction.arg3)
+                    argValue = xml.createTextNode(currentInstruction.arg3)
+                    arg.appendChild(argValue)
+                    instructionXML.appendChild(arg)
+                    pass
+        # insert instruction as child of program
+        program.appendChild(instructionXML)
+        # end of loop
+        instructionNumber += 1
+        currentInstruction = currentInstruction.next
     
     xml.writexml(sys.stdout, indent="", addindent="\t", encoding="UTF-8", newl="\n")
 
