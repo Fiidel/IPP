@@ -77,13 +77,54 @@ def ParseLinesToInstructionElements(lineList, iList):
 
 
 # <summary>
+# Returns the type of the given argument.
+# </summary>
+def GetArgType(instruction, arg):
+    if "@" in arg:
+        type = arg.partition("@")[0]
+        # var
+        if type == "GF" or type == "LF" or type == "TF":
+            type = "var"
+        # error - not int, bool, string nor nil
+        elif type != "int" and type != "bool" and type != "string" and type != "nil":
+            print("Error: unrecognized argument literal type.", file=sys.stderr)
+            # TODO: exit with the right exit code
+        return type
+    else:
+        if instruction.opcode == "READ":
+            return "type"
+        elif instruction.opcode == "CALL" or instruction.opcode == "LABEL" or instruction.opcode == "JUMPIFEQ" or instruction.opcode == "JUMPIFNEQ":
+            return "label"
+        else:
+            print("Error: unrecognized argument type.", file=sys.stderr)
+            # TODO: exit with the right exit code
+            return None
+
+
+# <summary>
+# Returns the value of the given argument.
+# </summary>
+def GetArgValue(arg):
+    if "@" in arg:
+        value = arg.partition("@")[2]
+        return value
+    else:
+        return arg
+
+
+# <summary>
 # Generates a given instruction argument to XML.
 # </summary>
-def GenerateXMLArgument(XML, instructionXML, arg, argNumber):
+def GenerateXMLArgument(XML, instructionXML, instruction, arg, argNumber):
     argXML = XML.createElement(f"arg{argNumber}")
-    argXML.setAttribute("type", arg)
-    argValue = XML.createTextNode(arg)
-    argXML.appendChild(argValue)
+    
+    argTypeAttribute = GetArgType(instruction, arg)
+    argXML.setAttribute("type", argTypeAttribute)
+    
+    argValue = GetArgValue(arg)
+    argValueElement = XML.createTextNode(argValue)
+    argXML.appendChild(argValueElement)
+    
     instructionXML.appendChild(argXML)
 
 
@@ -97,13 +138,13 @@ def GenerateXMLInstruction(XML, programXML, instruction, instructionNumber):
     # handle args
     # TODO: parse arguments into type and value (type is mandatory with every argument)
     if instruction.arg1 != None:
-        GenerateXMLArgument(XML, instructionXML, instruction.arg1, 1)
+        GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg1, 1)
 
         if instruction.arg2 != None:
-            GenerateXMLArgument(XML, instructionXML, instruction.arg2, 2)
+            GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg2, 2)
         
             if instruction.arg3 != None:
-                GenerateXMLArgument(XML, instructionXML, instruction.arg3, 3)
+                GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg3, 3)
                 
     programXML.appendChild(instructionXML)
 
