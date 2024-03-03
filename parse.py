@@ -88,7 +88,7 @@ def GetArgType(instruction, arg):
         # error - not int, bool, string nor nil
         elif type != "int" and type != "bool" and type != "string" and type != "nil":
             print("Error: unrecognized argument literal type.", file=sys.stderr)
-            # TODO: exit with the right exit code
+            sys.exit(23)
         return type
     else:
         if instruction.opcode == "READ":
@@ -97,7 +97,7 @@ def GetArgType(instruction, arg):
             return "label"
         else:
             print("Error: unrecognized argument type.", file=sys.stderr)
-            # TODO: exit with the right exit code
+            sys.exit(23)
             return None
 
 
