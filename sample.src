@@ -3,4 +3,7 @@
 DEFVAR GF@counter
 move GF@counter string@ #Init of empty string # nested comment
 #easy iteration
+Defvar GF@problematic
+MoVe GF@problematic string@this<is>xd'Prob"lema&tic+Another>>
+move GF@counter string@'
 LABEL while
