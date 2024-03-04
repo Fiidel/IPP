@@ -99,6 +99,7 @@ def GetArgType(instruction, arg):
             print("Error: unrecognized argument type.", file=sys.stderr)
             sys.exit(23)
             return None
+    # TODO: I mean, I guess this code is fine (as in "functional"), but please, I'm certain it could be made cleaner :)
 
 
 # <summary>
@@ -107,9 +108,21 @@ def GetArgType(instruction, arg):
 def GetArgValue(arg):
     if "@" in arg:
         value = arg.partition("@")[2]
+        # note: minidom automatically transforms problematic characters in string
+        
+        # TODO:
+        # if var or label, validate identifier characters and what it can start with
+        # if int, validate that its int
+        # if bool, validate that it's true/false
+        # if nil, validate nil i guess
+        # any string validations?
+        # probably export to 1 function Validate(), which I guess string transform to XML shouldnt be part of
+        # try to export the string thing outside too, like TransformStringToXMLString() except it checks the type in the function...? not too clean tho
         return value
     else:
         return arg
+    # THIS IS ABSOLUTELY HORRENDOUS DESIGN, UNREADABLE, DO SOMETHING ABOUT IT
+    # It is Rude code
 
 
 # <summary>
@@ -136,7 +149,6 @@ def GenerateXMLInstruction(XML, programXML, instruction, instructionNumber):
     instructionXML.setAttribute("order", str(instructionNumber))
     instructionXML.setAttribute("opcode", instruction.opcode.upper())
     # handle args
-    # TODO: parse arguments into type and value (type is mandatory with every argument)
     if instruction.arg1 != None:
         GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg1, 1)
 
