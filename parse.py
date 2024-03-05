@@ -148,12 +148,15 @@ def ValidateArgValue(value, type):
 def GetArgValue(arg, type):
     if "@" in arg:
         value = arg.partition("@")[2]
-        # note: minidom automatically transforms problematic characters in string
         ValidateArgValue(value, type)
-        return value
+        if type == "var":
+            return arg # need to return the scope too (GF, LF)
+        else:
+            return value
     else:
         ValidateArgValue(arg, type)
         return arg
+    # note: minidom automatically transforms problematic characters in string
 
 
 # <summary>
