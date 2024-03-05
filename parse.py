@@ -60,7 +60,11 @@ def ParseLinesToList():
                 lineList.append(line)
 
     # remove useless .IPPcode24 intro
-    lineList.remove(".IPPcode24")
+    if lineList[0] == ".IPPcode24":
+        lineList.remove(".IPPcode24")
+    else:
+        print("Error: missing '.IPPcode24' head in src file.", file=sys.stderr)
+        sys.exit(21)
     return lineList
 
 
