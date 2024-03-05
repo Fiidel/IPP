@@ -80,6 +80,16 @@ def RemoveCommentsFromLine(line):
 
 
 # <summary>
+# Validates that an instruction has no more than 3 arguments.
+# </summary>
+def ValidateNumberOfInstructionArguments(args):
+    if len(args) > 3:
+        print(f"Error: No instruction accepts more than 3 arguments.", file=sys.stderr)
+        sys.exit(23)
+    return
+
+
+# <summary>
 # Parses each line into its parts - instruction and arguments.
 # </summary>
 def ParseLinesToInstructionElements(lineList, iList):
@@ -87,6 +97,7 @@ def ParseLinesToInstructionElements(lineList, iList):
         # parse individual lines into instructions and arguments and insert them into InstructionList
         # use regex for whitespace
         instructionParts = line.split()
+        ValidateNumberOfInstructionArguments(instructionParts[1:])
         iList.InsertNextInstruction(instructionParts[0].upper(), *instructionParts[1:])
     return iList
 
