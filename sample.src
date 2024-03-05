@@ -5,6 +5,29 @@ move GF@counter string@ #Init of empty string # nested comment
 #easy iteration
 Defvar GF@problematic
 MoVe GF@problematic string@this<is>xd'Prob"lema&tic+Another>>
-move GF@counter string@'
 LABEL inv#+lid
 defvar GF@invald#;Again
+
+# test int value validity
+# move GF@counter int@1235
+# move GF@counter int@+1235
+# move GF@counter int@-1235
+# move GF@counter int@+-1235
+# move GF@counter int@-+1235
+# move GF@counter int@12.35
+# move GF@counter int@12+35
+# move GF@counter int@12x35
+
+# test bool value validity
+# move GF@counter bool@true
+# move GF@counter bool@false
+# move GF@counter bool@TRUE
+# move GF@counter bool@str
+# move GF@counter bool@123
+# move GF@counter bool@
+
+# test nil value validity
+# move GF@counter nil@nil
+# move GF@counter nil@0
+# move GF@counter nil@str
+# move GF@counter NIL@NIL
