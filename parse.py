@@ -87,7 +87,7 @@ def GetArgType(instruction, arg):
             type = "var"
         # error - not int, bool, string nor nil
         elif type != "int" and type != "bool" and type != "string" and type != "nil":
-            print("Error: unrecognized argument literal type.", file=sys.stderr)
+            print("Error: unrecognized literal or variable argument type.", file=sys.stderr)
             sys.exit(23)
         return type
     else:
