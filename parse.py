@@ -9,7 +9,7 @@ import argparse
 ###################################################
 
 argparser = argparse.ArgumentParser(
-    description="Skript typu filtr nacte ze standardniho vstupu zdrojovy kod v IPPcode24, zkontroluje lexikalni a syntaktickou správnost kodu a vypise na standardni vystup XML reprezentaci programu."
+    description="The script reads IPPcode24 source code from standard input, checks its lexical and syntactic correctness, and writes the XML representation of the program to standard output."
 )
 args = argparser.parse_args()
 
