@@ -87,7 +87,7 @@ def ParseLinesToInstructionElements(lineList, iList):
         # parse individual lines into instructions and arguments and insert them into InstructionList
         # use regex for whitespace
         instructionParts = line.split()
-        iList.InsertNextInstruction(instructionParts[0], *instructionParts[1:])
+        iList.InsertNextInstruction(instructionParts[0].upper(), *instructionParts[1:])
     return iList
 
 
@@ -183,7 +183,7 @@ def GenerateXMLArgument(XML, instructionXML, instruction, arg, argNumber):
 def GenerateXMLInstruction(XML, programXML, instruction, instructionNumber):
     instructionXML = XML.createElement("instruction")
     instructionXML.setAttribute("order", str(instructionNumber))
-    instructionXML.setAttribute("opcode", instruction.opcode.upper())
+    instructionXML.setAttribute("opcode", instruction.opcode)
     # handle args
     if instruction.arg1 != None:
         GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg1, 1)
