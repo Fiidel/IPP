@@ -117,14 +117,19 @@ def GetArgType(instruction, arg):
 # Validates the value of a given argument based on its type. Exits with an exit code if the value is invalid.
 # </summary>
 def ValidateArgValue(value, type):
+    # if var or label, validate identifier characters
+    if type == "var" or type=="label":
+        if re.search(r"^[a-zA-Z0-9_\-$&%*!?]+$", value) == None:
+            print("Error: Invalid identifier name.", file=sys.stderr)
+            sys.exit(23)
     
-    pass
     # TODO:
-    # if var or label, validate identifier characters and what it can start with
     # if int, validate that its int
     # if bool, validate that it's true/false
     # if nil, validate nil i guess
     # any string validations?
+    # TODO: export each one to a separate validation function
+
 
 # <summary>
 # Returns the value of the given argument.
