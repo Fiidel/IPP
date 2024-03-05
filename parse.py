@@ -39,7 +39,7 @@ class InstructionList:
             while lastInstruction.next != None:
                 lastInstruction = lastInstruction.next
             lastInstruction.next = newInstruction
-    
+
 
 ###################################################
 #####               FUNCTIONS                 #####
@@ -108,12 +108,11 @@ def GetArgType(instruction, arg):
     else:
         if instruction.opcode == "READ":
             return "type"
-        elif instruction.opcode == "CALL" or instruction.opcode == "LABEL" or instruction.opcode == "JUMPIFEQ" or instruction.opcode == "JUMPIFNEQ":
+        elif instruction.opcode == "CALL" or instruction.opcode == "LABEL" or instruction.opcode == "JUMP" or instruction.opcode == "JUMPIFEQ" or instruction.opcode == "JUMPIFNEQ":
             return "label"
         else:
-            print("Error: unrecognized argument type.", file=sys.stderr)
+            print(f"Error: unrecognized argument type {arg}.", file=sys.stderr)
             sys.exit(23)
-            return None
 
 
 # <summary>
