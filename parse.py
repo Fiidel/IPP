@@ -248,3 +248,5 @@ iList = ParseLinesToInstructionElements(lineList, iList)
 # Debug_PrintInstructionList(iList)
 
 GenerateXML(iList)
+
+sys.exit(0)
