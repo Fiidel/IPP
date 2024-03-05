@@ -1,0 +1,41 @@
+Opcode categories based on arguments.
+Neterminál ⟨var⟩ značí proměnnou, ⟨symb⟩ konstantu nebo proměnnou, ⟨label⟩ značí návěští.
+
+CREATEFRAME
+PUSHFRAME
+POPFRAME
+RETURN
+BREAK
+
+DEFVAR ⟨var⟩
+POPS ⟨var⟩
+
+PUSHS ⟨symb⟩
+WRITE ⟨symb⟩
+EXIT ⟨symb⟩
+DPRINT ⟨symb⟩
+
+MOVE ⟨var⟩ ⟨symb⟩
+INT2CHAR ⟨var⟩ ⟨symb⟩
+STRLEN ⟨var⟩ ⟨symb⟩
+TYPE ⟨var⟩ ⟨symb⟩
+
+READ ⟨var⟩ ⟨type⟩
+
+CALL ⟨label⟩
+LABEL ⟨label⟩
+JUMP ⟨label⟩
+
+JUMPIFEQ ⟨label⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+JUMPIFNEQ ⟨label⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+
+ADD ⟨var⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+SUB ⟨var⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+MUL ⟨var⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+IDIV ⟨var⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+LT/GT/EQ ⟨var⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+AND/OR/NOT ⟨var⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+STRI2INT ⟨var⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+CONCAT ⟨var⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+GETCHAR ⟨var⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
+SETCHAR ⟨var⟩ ⟨symb1 ⟩ ⟨symb2 ⟩
