@@ -1,6 +1,17 @@
 import sys
 import re
 from xml.dom import minidom as md
+import argparse
+
+
+###################################################
+#####              HELP ARGUMENT              #####
+###################################################
+
+argparser = argparse.ArgumentParser(
+    description="Skript typu filtr nacte ze standardniho vstupu zdrojovy kod v IPPcode24, zkontroluje lexikalni a syntaktickou správnost kodu a vypise na standardni vystup XML reprezentaci programu."
+)
+args = argparser.parse_args()
 
 
 ###################################################
