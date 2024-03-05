@@ -136,6 +136,7 @@ def GetArgValue(arg, type):
         ValidateArgValue(value, type)
         return value
     else:
+        ValidateArgValue(arg, type)
         return arg
 
 
