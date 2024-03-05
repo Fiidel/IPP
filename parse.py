@@ -118,17 +118,28 @@ def GetArgType(instruction, arg):
 # </summary>
 def ValidateArgValue(value, type):
     # if var or label, validate identifier characters
-    if type == "var" or type=="label":
+    if type == "var" or type == "label":
         if re.search(r"^[a-zA-Z0-9_\-$&%*!?]+$", value) == None:
-            print("Error: Invalid identifier name.", file=sys.stderr)
+            print(f"Error: Identifier name {value} contains invalid characters.", file=sys.stderr)
             sys.exit(23)
     
-    # TODO:
     # if int, validate that its int
+    if type == "int":
+        if re.search(r"^[+-]?[0-9]+$", value) == None:
+            print(f"Error: Invalid integer value {value}.", file=sys.stderr)
+            sys.exit(23)
+            
     # if bool, validate that it's true/false
-    # if nil, validate nil i guess
-    # any string validations?
-    # TODO: export each one to a separate validation function
+    if type == "bool":
+        if re.search(r"^true$", value) == None and re.search(r"^false$", value) == None:
+            print(f"Error: Invalid bool value {value}. Must be 'true' or 'false'.", file=sys.stderr)
+            sys.exit(23)
+    
+    # if nil, validate nil
+    if type == "nil":
+        if re.search(r"^nil$", value) == None:
+            print(f"Error: Invalid nil value {value}. Must be 'nil'.", file=sys.stderr)
+            sys.exit(23)
 
 
 # <summary>
