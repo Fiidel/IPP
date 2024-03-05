@@ -114,7 +114,6 @@ def GetArgType(instruction, arg):
             print("Error: unrecognized argument type.", file=sys.stderr)
             sys.exit(23)
             return None
-    # TODO: I mean, I guess this code is fine (as in "functional"), but please, I'm certain it could be made cleaner :)
 
 
 # <summary>
