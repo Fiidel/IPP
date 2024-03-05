@@ -170,6 +170,9 @@ def GenerateXMLArgument(XML, instructionXML, instruction, arg, argNumber):
     argTypeAttribute = GetArgType(instruction, arg)
     argXML.setAttribute("type", argTypeAttribute)
     
+    # TODO: ValidateArgTypeForOpcode(instruction.opcode, argTypeAttribute)
+    # will be based on argNumber and the specific opcode
+    
     argValue = GetArgValue(arg, argTypeAttribute)
     argValueElement = XML.createTextNode(argValue)
     argXML.appendChild(argValueElement)
@@ -184,6 +187,13 @@ def GenerateXMLInstruction(XML, programXML, instruction, instructionNumber):
     instructionXML = XML.createElement("instruction")
     instructionXML.setAttribute("order", str(instructionNumber))
     instructionXML.setAttribute("opcode", instruction.opcode)
+    
+    # TODO:
+    # expectedNumOfArgumentsForOpcode = GetOpcodeNumOfArgs()
+        # also if opcode not found, throw error (22 for this one)
+    # givenNumOfArguments = ??
+    # compare if they are equal, possibly exit with exit code
+    
     # handle args
     if instruction.arg1 != None:
         GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg1, 1)
