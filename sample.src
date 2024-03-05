@@ -6,5 +6,5 @@ move GF@counter string@ #Init of empty string # nested comment
 Defvar GF@problematic
 MoVe GF@problematic string@this<is>xd'Prob"lema&tic+Another>>
 move GF@counter string@'
-LABEL inv%lid
+LABEL inv+lid
 defvar GF@inval;dAgain
