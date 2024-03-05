@@ -114,26 +114,29 @@ def GetArgType(instruction, arg):
 
 
 # <summary>
+# Validates the value of a given argument based on its type. Exits with an exit code if the value is invalid.
+# </summary>
+def ValidateArgValue(value, type):
+    
+    pass
+    # TODO:
+    # if var or label, validate identifier characters and what it can start with
+    # if int, validate that its int
+    # if bool, validate that it's true/false
+    # if nil, validate nil i guess
+    # any string validations?
+
+# <summary>
 # Returns the value of the given argument.
 # </summary>
-def GetArgValue(arg):
+def GetArgValue(arg, type):
     if "@" in arg:
         value = arg.partition("@")[2]
         # note: minidom automatically transforms problematic characters in string
-        
-        # TODO:
-        # if var or label, validate identifier characters and what it can start with
-        # if int, validate that its int
-        # if bool, validate that it's true/false
-        # if nil, validate nil i guess
-        # any string validations?
-        # probably export to 1 function Validate(), which I guess string transform to XML shouldnt be part of
-        # try to export the string thing outside too, like TransformStringToXMLString() except it checks the type in the function...? not too clean tho
+        ValidateArgValue(value, type)
         return value
     else:
         return arg
-    # THIS IS ABSOLUTELY HORRENDOUS DESIGN, UNREADABLE, DO SOMETHING ABOUT IT
-    # It is Rude code
 
 
 # <summary>
@@ -145,7 +148,7 @@ def GenerateXMLArgument(XML, instructionXML, instruction, arg, argNumber):
     argTypeAttribute = GetArgType(instruction, arg)
     argXML.setAttribute("type", argTypeAttribute)
     
-    argValue = GetArgValue(arg)
+    argValue = GetArgValue(arg, argTypeAttribute)
     argValueElement = XML.createTextNode(argValue)
     argXML.appendChild(argValueElement)
     
