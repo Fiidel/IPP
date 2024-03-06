@@ -46,6 +46,49 @@ class InstructionList:
 ###################################################
 
 # <summary>
+# Returns expected argument number and types for a given IPPcode24 instruction opcode.
+# </summary>
+def GetInstructionArgTypes(instructionOpcode):
+    match instructionOpcode:
+        # opcode
+        case "CREATEFRAME" | "PUSHFRAME" | "POPFRAME" | "RETURN" | "BREAK":
+            return (0)
+        
+        # opcode (var)
+        case "DEFVAR" | "POPS":
+            return (1, "var")
+        
+        # opcode (symb)
+        case "PUSHS" | "WRITE" | "EXIT" | "DPRINT":
+            return (1, "symb")
+        
+        # opcode (var) (symb)
+        case "MOVE" | "INT2CHAR" | "STRLEN" | "TYPE":
+            return (2, "var", "symb")
+        
+        # opcode (var) (type)
+        case "READ":
+            return (2, "var", "type")
+        
+        # opcode (label)
+        case "CALL" | "LABEL" | "JUMP":
+            return (1, "label")
+        
+        # opcode (label) (symb1) (symb2)
+        case "JUMPIFEQ" | "JUMPIFNEQ":
+            return (3, "label", "symb", "symb")
+        
+        # opcode (var) (symb1) (symb2)
+        case "ADD" | "SUB" | "MUL" | "IDIV" | "LT" | "GT" | "EQ" | "AND" | "OR" | "NOT" | "STRI2INT" | "CONCAT" | "GETCHAR" | "SETCHAR":
+            return (3, "var", "symb", "symb")
+        
+        # opcode not found
+        case _:
+            print(f"Error: Unknown instruction opcode {instructionOpcode}.", file=sys.stderr)
+            sys.exit(22)
+
+    
+# <summary>
 # Parses each line into a list element. Empty lines and .IPPcode24 line are ignored.
 # </summary>
 def ParseLinesToList():
@@ -192,6 +235,21 @@ def GenerateXMLArgument(XML, instructionXML, instruction, arg, argNumber):
 
 
 # <summary>
+# Returns the number of arguments of a given instruction based on which last argument isn't None.
+# (The instructions arguments are filled sequentially from arg1 to arg3, with implicit None values unless set otherwise.)
+# </summary>
+def GetNumOfArgs(instruction):
+    if instruction.arg3 != None:
+        return 3
+    elif instruction.arg2 != None:
+        return 2
+    elif instruction.arg1 != None:
+        return 1
+    else:
+        return 0
+
+
+# <summary>
 # Generates a given instruction to XML.
 # </summary>
 def GenerateXMLInstruction(XML, programXML, instruction, instructionNumber):
@@ -200,10 +258,14 @@ def GenerateXMLInstruction(XML, programXML, instruction, instructionNumber):
     instructionXML.setAttribute("opcode", instruction.opcode)
     
     # TODO:
-    # expectedNumOfArgumentsForOpcode = GetOpcodeNumOfArgs()
-        # also if opcode not found, throw error (22 for this one)
-    # givenNumOfArguments = ??
-    # compare if they are equal, possibly exit with exit code
+    numOfGivenArgs = GetNumOfArgs(instruction)
+    expectedArgs = GetInstructionArgTypes(instruction.opcode)
+    expectedNumOfArgs = expectedArgs[0]
+    expectedArgTypes = expectedArgs[1:]
+    
+    if expectedNumOfArgs != numOfGivenArgs:
+        print(f"Error: Unexpected number of arguments for instruction {instruction.opcode}.", file=sys.stderr)
+        sys.exit(23)
     
     # handle args
     if instruction.arg1 != None:
