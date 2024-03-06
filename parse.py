@@ -42,8 +42,194 @@ class InstructionList:
 
 
 ###################################################
-#####               FUNCTIONS                 #####
+#####          VALIDATION FUNCTIONS           #####
 ###################################################
+
+# <summary>
+# Validates that an instruction has no more than 3 arguments.
+# </summary>
+def ValidateNumberOfInstructionArguments(args):
+    if len(args) > 3:
+        print(f"Error: No instruction accepts more than 3 arguments.", file=sys.stderr)
+        sys.exit(23)
+    return
+
+
+# <summary>
+# Validates the value of a given argument based on its type. Exits with an exit code if the value is invalid.
+# </summary>
+def ValidateArgValue(value, type):
+    # if var or label, validate identifier characters
+    if type == "var" or type == "label":
+        if re.search(r"^[a-zA-Z0-9_\-$&%*!?]+$", value) == None:
+            print(f"Error: Identifier name {value} contains invalid characters.", file=sys.stderr)
+            sys.exit(23)
+    
+    # if int, validate that its int
+    if type == "int":
+        if re.search(r"^[+-]?[0-9]+$", value) == None:
+            print(f"Error: Invalid integer value {value}.", file=sys.stderr)
+            sys.exit(23)
+            
+    # if bool, validate that it's true/false
+    if type == "bool":
+        if re.search(r"^true$", value) == None and re.search(r"^false$", value) == None:
+            print(f"Error: Invalid bool value {value}. Must be 'true' or 'false'.", file=sys.stderr)
+            sys.exit(23)
+    
+    # if nil, validate nil
+    if type == "nil":
+        if re.search(r"^nil$", value) == None:
+            print(f"Error: Invalid nil value {value}. Must be 'nil'.", file=sys.stderr)
+            sys.exit(23)
+
+
+# <summary>
+# Validates if the argument is of the correct type for a given opcode.
+# </summary>
+def ValidateArgTypeForOpcode(opcode, argType, expectedArgType):
+    if expectedArgType == "label" and argType != "label":
+        ArgTypeError(opcode, argType, expectedArgType)
+    if expectedArgType == "type" and argType != "type":
+        ArgTypeError(opcode, argType, expectedArgType)
+    if expectedArgType == "var" and argType != "var":
+        ArgTypeError(opcode, argType, expectedArgType)
+    if expectedArgType == "symb" and argType != "var" and not IsLiteral(argType):
+        ArgTypeError(opcode, argType, expectedArgType)
+    return
+
+
+# <summary>
+# Prints error message to stderr and exits with an exit code.
+# </summary>
+def ArgTypeError(opcode, argType, expectedArgType):
+    print(f"Error: unexpected argument of type {argType} for instruction {opcode}. Expected: {expectedArgType}.", file=sys.stderr)
+    sys.exit(23)
+
+
+###################################################
+#####            OTHER FUNCTIONS              #####
+###################################################
+
+###################################################
+############## STDIN TO LIST OF LINES #############
+
+# <summary>
+# Parses each line into a list element. Empty lines and .IPPcode24 line are ignored.
+# </summary>
+def ParseLinesToList():
+    lineList = []
+
+    for line in sys.stdin:
+        # if a line isn't just whitespace
+        if re.search(r"^\s*$", line) == None:
+            line = line.strip()
+            line = RemoveCommentsFromLine(line)
+            if line != "":
+                lineList.append(line)
+
+    # remove useless .IPPcode24 header
+    if lineList[0] == ".IPPcode24":
+        lineList.remove(".IPPcode24")
+    else:
+        print("Error: missing '.IPPcode24' head in src file.", file=sys.stderr)
+        sys.exit(21)
+    return lineList
+
+
+# <summary>
+# Removes # comments from a given line.
+# </summary>
+def RemoveCommentsFromLine(line):
+    comment = re.search(r"[#](.*)", line)
+    if comment != None:
+        line = line.replace(comment[0], "")
+        line = line.strip()
+    return line
+
+
+###################################################
+######## LIST OF LINES TO InstructionList #########
+
+# <summary>
+# Parses each line into its parts - instruction and arguments.
+# </summary>
+def ParseLinesToInstructionElements(lineList, iList):
+    for line in lineList:
+        # parse individual lines into instructions and arguments and insert them into InstructionList
+        instructionParts = line.split()
+        ValidateNumberOfInstructionArguments(instructionParts[1:])
+        iList.InsertNextInstruction(instructionParts[0].upper(), *instructionParts[1:])
+    return iList
+
+
+###################################################
+################# XML GENERATION ##################
+
+# <summary>
+# Parses the instruction list to an XML format.
+# </summary>
+def GenerateXML(iList):    
+    # create xml document and add root program element
+    XML = md.Document()
+    programXML = XML.createElement("program")
+    programXML.setAttribute("language", "IPPcode24")
+    XML.appendChild(programXML)
+    
+    # add all instructions from list to element
+    currentInstruction = iList.head
+    instructionNumber = 1
+    while currentInstruction != None:
+        GenerateXMLInstruction(XML, programXML, currentInstruction, instructionNumber)
+        instructionNumber += 1
+        currentInstruction = currentInstruction.next
+    
+    XML.writexml(sys.stdout, indent="", addindent="\t", encoding="UTF-8", newl="\n")
+
+
+# <summary>
+# Generates a given instruction to XML.
+# </summary>
+def GenerateXMLInstruction(XML, programXML, instruction, instructionNumber):
+    instructionXML = XML.createElement("instruction")
+    instructionXML.setAttribute("order", str(instructionNumber))
+    instructionXML.setAttribute("opcode", instruction.opcode)
+    
+    numOfGivenArgs = GetNumOfArgs(instruction)
+    expectedArgs = GetInstructionArgTypes(instruction.opcode)
+    expectedNumOfArgs = expectedArgs[0]
+    
+    if expectedNumOfArgs != numOfGivenArgs:
+        print(f"Error: Unexpected number of arguments for instruction {instruction.opcode}.", file=sys.stderr)
+        sys.exit(23)
+    
+    # handle args
+    if instruction.arg1 != None:
+        GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg1, 1, expectedArgs)
+
+        if instruction.arg2 != None:
+            GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg2, 2, expectedArgs)
+        
+            if instruction.arg3 != None:
+                GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg3, 3, expectedArgs)
+                
+    programXML.appendChild(instructionXML)
+
+
+# <summary>
+# Returns the number of arguments of a given instruction based on which last argument isn't None.
+# (The instructions arguments are filled sequentially from arg1 to arg3, with implicit None values unless set otherwise.)
+# </summary>
+def GetNumOfArgs(instruction):
+    if instruction.arg3 != None:
+        return 3
+    elif instruction.arg2 != None:
+        return 2
+    elif instruction.arg1 != None:
+        return 1
+    else:
+        return 0
+
 
 # <summary>
 # Returns expected argument number and types for a given IPPcode24 instruction opcode.
@@ -87,62 +273,24 @@ def GetInstructionArgTypes(instructionOpcode):
             print(f"Error: Unknown instruction opcode {instructionOpcode}.", file=sys.stderr)
             sys.exit(22)
 
+
+# <summary>
+# Generates a given instruction argument to XML.
+# </summary>
+def GenerateXMLArgument(XML, instructionXML, instruction, arg, argNumber, expectedArgs):
+    argXML = XML.createElement(f"arg{argNumber}")
     
-# <summary>
-# Parses each line into a list element. Empty lines and .IPPcode24 line are ignored.
-# </summary>
-def ParseLinesToList():
-    lineList = []
-
-    for line in sys.stdin:
-        # if a line isn't just whitespace
-        if re.search(r"^\s*$", line) == None:
-            line = line.strip()
-            line = RemoveCommentsFromLine(line)
-            if line != "":
-                lineList.append(line)
-
-    # remove useless .IPPcode24 intro
-    if lineList[0] == ".IPPcode24":
-        lineList.remove(".IPPcode24")
-    else:
-        print("Error: missing '.IPPcode24' head in src file.", file=sys.stderr)
-        sys.exit(21)
-    return lineList
-
-
-# <summary>
-# Removes # comments from a given line.
-# </summary>
-def RemoveCommentsFromLine(line):
-    comment = re.search(r"[#](.*)", line)
-    if comment != None:
-        line = line.replace(comment[0], "")
-        line = line.strip()
-    return line
-
-
-# <summary>
-# Validates that an instruction has no more than 3 arguments.
-# </summary>
-def ValidateNumberOfInstructionArguments(args):
-    if len(args) > 3:
-        print(f"Error: No instruction accepts more than 3 arguments.", file=sys.stderr)
-        sys.exit(23)
-    return
-
-
-# <summary>
-# Parses each line into its parts - instruction and arguments.
-# </summary>
-def ParseLinesToInstructionElements(lineList, iList):
-    for line in lineList:
-        # parse individual lines into instructions and arguments and insert them into InstructionList
-        # use regex for whitespace
-        instructionParts = line.split()
-        ValidateNumberOfInstructionArguments(instructionParts[1:])
-        iList.InsertNextInstruction(instructionParts[0].upper(), *instructionParts[1:])
-    return iList
+    argTypeAttribute = GetArgType(instruction, arg)
+    argXML.setAttribute("type", argTypeAttribute)
+    
+    # important note: the 0th index of expectedArgs is the number of arguments for the given opcode, hence we can index correctly with argNumber (which starts at 1, not 0)
+    ValidateArgTypeForOpcode(instruction.opcode, argTypeAttribute, expectedArgs[argNumber])
+    
+    argValue = GetArgValue(arg, argTypeAttribute)
+    argValueElement = XML.createTextNode(argValue)
+    argXML.appendChild(argValueElement)
+    
+    instructionXML.appendChild(argXML)
 
 
 # <summary>
@@ -166,35 +314,6 @@ def GetArgType(instruction, arg):
             return "label"
         else:
             print(f"Error: unrecognized argument type {arg}.", file=sys.stderr)
-            sys.exit(23)
-
-
-# <summary>
-# Validates the value of a given argument based on its type. Exits with an exit code if the value is invalid.
-# </summary>
-def ValidateArgValue(value, type):
-    # if var or label, validate identifier characters
-    if type == "var" or type == "label":
-        if re.search(r"^[a-zA-Z0-9_\-$&%*!?]+$", value) == None:
-            print(f"Error: Identifier name {value} contains invalid characters.", file=sys.stderr)
-            sys.exit(23)
-    
-    # if int, validate that its int
-    if type == "int":
-        if re.search(r"^[+-]?[0-9]+$", value) == None:
-            print(f"Error: Invalid integer value {value}.", file=sys.stderr)
-            sys.exit(23)
-            
-    # if bool, validate that it's true/false
-    if type == "bool":
-        if re.search(r"^true$", value) == None and re.search(r"^false$", value) == None:
-            print(f"Error: Invalid bool value {value}. Must be 'true' or 'false'.", file=sys.stderr)
-            sys.exit(23)
-    
-    # if nil, validate nil
-    if type == "nil":
-        if re.search(r"^nil$", value) == None:
-            print(f"Error: Invalid nil value {value}. Must be 'nil'.", file=sys.stderr)
             sys.exit(23)
 
 
@@ -223,115 +342,6 @@ def IsLiteral(argType):
         return True
     else:
         return False
-
-
-# <summary>
-# Prints error message to stderr and exits with an exit code.
-# </summary>
-def ArgTypeError(opcode, argType, expectedArgType):
-    print(f"Error: unexpected argument of type {argType} for instruction {opcode}. Expected: {expectedArgType}.", file=sys.stderr)
-    sys.exit(23)
-
-
-# <summary>
-# Validates if the argument is of the correct type for a given opcode.
-# </summary>
-def ValidateArgTypeForOpcode(opcode, argType, expectedArgType):
-    if expectedArgType == "label" and argType != "label":
-        ArgTypeError(opcode, argType, expectedArgType)
-    if expectedArgType == "type" and argType != "type":
-        ArgTypeError(opcode, argType, expectedArgType)
-    if expectedArgType == "var" and argType != "var":
-        ArgTypeError(opcode, argType, expectedArgType)
-    if expectedArgType == "symb" and argType != "var" and not IsLiteral(argType):
-        ArgTypeError(opcode, argType, expectedArgType)
-    return
-
-
-# <summary>
-# Generates a given instruction argument to XML.
-# </summary>
-def GenerateXMLArgument(XML, instructionXML, instruction, arg, argNumber, expectedArgs):
-    argXML = XML.createElement(f"arg{argNumber}")
-    
-    argTypeAttribute = GetArgType(instruction, arg)
-    argXML.setAttribute("type", argTypeAttribute)
-    
-    # important note: the 0th index of expectedArgs is the number of arguments for the given opcode, hence we can index correctly with argNumber (which starts at 1, not 0)
-    ValidateArgTypeForOpcode(instruction.opcode, argTypeAttribute, expectedArgs[argNumber])
-    
-    argValue = GetArgValue(arg, argTypeAttribute)
-    argValueElement = XML.createTextNode(argValue)
-    argXML.appendChild(argValueElement)
-    
-    instructionXML.appendChild(argXML)
-
-
-# <summary>
-# Returns the number of arguments of a given instruction based on which last argument isn't None.
-# (The instructions arguments are filled sequentially from arg1 to arg3, with implicit None values unless set otherwise.)
-# </summary>
-def GetNumOfArgs(instruction):
-    if instruction.arg3 != None:
-        return 3
-    elif instruction.arg2 != None:
-        return 2
-    elif instruction.arg1 != None:
-        return 1
-    else:
-        return 0
-
-
-# <summary>
-# Generates a given instruction to XML.
-# </summary>
-def GenerateXMLInstruction(XML, programXML, instruction, instructionNumber):
-    instructionXML = XML.createElement("instruction")
-    instructionXML.setAttribute("order", str(instructionNumber))
-    instructionXML.setAttribute("opcode", instruction.opcode)
-    
-    numOfGivenArgs = GetNumOfArgs(instruction)
-    expectedArgs = GetInstructionArgTypes(instruction.opcode)
-    expectedNumOfArgs = expectedArgs[0]
-    
-    if expectedNumOfArgs != numOfGivenArgs:
-        print(f"Error: Unexpected number of arguments for instruction {instruction.opcode}.", file=sys.stderr)
-        sys.exit(23)
-    
-    # handle args
-    if instruction.arg1 != None:
-        GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg1, 1, expectedArgs)
-
-        if instruction.arg2 != None:
-            GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg2, 2, expectedArgs)
-        
-            if instruction.arg3 != None:
-                GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg3, 3, expectedArgs)
-                
-    programXML.appendChild(instructionXML)
-
-
-# <summary>
-# Parses the instruction list to an XML format.
-# </summary>
-def GenerateXML(iList):
-    #XML head: <?xml version="1.0" encoding="UTF-8"?>
-    
-    # create xml document and add root program element
-    XML = md.Document()
-    programXML = XML.createElement("program")
-    programXML.setAttribute("language", "IPPcode24")
-    XML.appendChild(programXML)
-    
-    # add all instructions from list to element
-    currentInstruction = iList.head
-    instructionNumber = 1
-    while currentInstruction != None:
-        GenerateXMLInstruction(XML, programXML, currentInstruction, instructionNumber)
-        instructionNumber += 1
-        currentInstruction = currentInstruction.next
-    
-    XML.writexml(sys.stdout, indent="", addindent="\t", encoding="UTF-8", newl="\n")
 
 
 ###################################################
