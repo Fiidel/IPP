@@ -216,16 +216,49 @@ def GetArgValue(arg, type):
 
 
 # <summary>
+# Returns True if a given argument type is a literal (int, bool, string, nil), False if it isn't.
+# </summary>
+def IsLiteral(argType):
+    if argType == "int" or argType == "bool" or argType == "string" or argType == "nil":
+        return True
+    else:
+        return False
+
+
+# <summary>
+# Prints error message to stderr and exits with an exit code.
+# </summary>
+def ArgTypeError(opcode, argType, expectedArgType):
+    print(f"Error: unexpected argument of type {argType} for instruction {opcode}. Expected: {expectedArgType}.", file=sys.stderr)
+    sys.exit(23)
+
+
+# <summary>
+# Validates if the argument is of the correct type for a given opcode.
+# </summary>
+def ValidateArgTypeForOpcode(opcode, argType, expectedArgType):
+    if expectedArgType == "label" and argType != "label":
+        ArgTypeError(opcode, argType, expectedArgType)
+    if expectedArgType == "type" and argType != "type":
+        ArgTypeError(opcode, argType, expectedArgType)
+    if expectedArgType == "var" and argType != "var":
+        ArgTypeError(opcode, argType, expectedArgType)
+    if expectedArgType == "symb" and argType != "var" and not IsLiteral(argType):
+        ArgTypeError(opcode, argType, expectedArgType)
+    return
+
+
+# <summary>
 # Generates a given instruction argument to XML.
 # </summary>
-def GenerateXMLArgument(XML, instructionXML, instruction, arg, argNumber):
+def GenerateXMLArgument(XML, instructionXML, instruction, arg, argNumber, expectedArgs):
     argXML = XML.createElement(f"arg{argNumber}")
     
     argTypeAttribute = GetArgType(instruction, arg)
     argXML.setAttribute("type", argTypeAttribute)
     
-    # TODO: ValidateArgTypeForOpcode(instruction.opcode, argTypeAttribute)
-    # will be based on argNumber and the specific opcode
+    # important note: the 0th index of expectedArgs is the number of arguments for the given opcode, hence we can index correctly with argNumber (which starts at 1, not 0)
+    ValidateArgTypeForOpcode(instruction.opcode, argTypeAttribute, expectedArgs[argNumber])
     
     argValue = GetArgValue(arg, argTypeAttribute)
     argValueElement = XML.createTextNode(argValue)
@@ -257,11 +290,9 @@ def GenerateXMLInstruction(XML, programXML, instruction, instructionNumber):
     instructionXML.setAttribute("order", str(instructionNumber))
     instructionXML.setAttribute("opcode", instruction.opcode)
     
-    # TODO:
     numOfGivenArgs = GetNumOfArgs(instruction)
     expectedArgs = GetInstructionArgTypes(instruction.opcode)
     expectedNumOfArgs = expectedArgs[0]
-    expectedArgTypes = expectedArgs[1:]
     
     if expectedNumOfArgs != numOfGivenArgs:
         print(f"Error: Unexpected number of arguments for instruction {instruction.opcode}.", file=sys.stderr)
@@ -269,13 +300,13 @@ def GenerateXMLInstruction(XML, programXML, instruction, instructionNumber):
     
     # handle args
     if instruction.arg1 != None:
-        GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg1, 1)
+        GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg1, 1, expectedArgs)
 
         if instruction.arg2 != None:
-            GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg2, 2)
+            GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg2, 2, expectedArgs)
         
             if instruction.arg3 != None:
-                GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg3, 3)
+                GenerateXMLArgument(XML, instructionXML, instruction, instruction.arg3, 3, expectedArgs)
                 
     programXML.appendChild(instructionXML)
 
