@@ -238,35 +238,35 @@ def GetInstructionArgTypes(instructionOpcode):
     match instructionOpcode:
         # opcode
         case "CREATEFRAME" | "PUSHFRAME" | "POPFRAME" | "RETURN" | "BREAK":
-            return (0)
+            return [0]
         
         # opcode (var)
         case "DEFVAR" | "POPS":
-            return (1, "var")
+            return [1, "var"]
         
         # opcode (symb)
         case "PUSHS" | "WRITE" | "EXIT" | "DPRINT":
-            return (1, "symb")
+            return [1, "symb"]
         
         # opcode (var) (symb)
         case "MOVE" | "INT2CHAR" | "STRLEN" | "TYPE":
-            return (2, "var", "symb")
+            return [2, "var", "symb"]
         
         # opcode (var) (type)
         case "READ":
-            return (2, "var", "type")
+            return [2, "var", "type"]
         
         # opcode (label)
         case "CALL" | "LABEL" | "JUMP":
-            return (1, "label")
+            return [1, "label"]
         
         # opcode (label) (symb1) (symb2)
         case "JUMPIFEQ" | "JUMPIFNEQ":
-            return (3, "label", "symb", "symb")
+            return [3, "label", "symb", "symb"]
         
         # opcode (var) (symb1) (symb2)
         case "ADD" | "SUB" | "MUL" | "IDIV" | "LT" | "GT" | "EQ" | "AND" | "OR" | "NOT" | "STRI2INT" | "CONCAT" | "GETCHAR" | "SETCHAR":
-            return (3, "var", "symb", "symb")
+            return [3, "var", "symb", "symb"]
         
         # opcode not found
         case _:
