@@ -10,7 +10,9 @@
 *.userosscache
 *.sln.docstates
 Soubory*
-ipp-core/
+!/ipp-core/
+/ipp-core/*
+!/ipp-core/student/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
