@@ -23,6 +23,4 @@ class InstructionParser
             }
         }
     }
-
-    // TODO: instructions should be a ParseDomList2Instructions arg rather than parser property
 }
