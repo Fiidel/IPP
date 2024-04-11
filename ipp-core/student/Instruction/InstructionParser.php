@@ -13,15 +13,25 @@ class InstructionParser
             $attributes = $instr->attributes;
             $opcode = $attributes->getNamedItem("opcode")->nodeValue;
 
-            switch ($opcode) {
+            // TODO: store instructions somewhere
+            switch ($opcode)
+            {
+                case "DEFVAR":
+                    $factory = new DefvarInstructionFactory;
+                    break;
+
                 case "MOVE":
-                    // TODO: create MOVE instruction and store somewhere
                     $factory = new MoveInstructionFactory;
-                    $factory->CreateInstruction($instr);
                     break;
                 
                 default:
+                    $factory = null;
                     break;
+            }
+
+            if ($factory != null)
+            {
+                $factory->CreateInstruction($instr);
             }
         }
     }

@@ -12,9 +12,9 @@ class MoveInstruction extends InstructionBase
 
     // CONSTRUCTOR
     public function __construct
-        (ArgTypeEnum $arg1type, string $arg1value, ArgTypeEnum $arg2type, string $arg2value)
+        (int $order, ArgTypeEnum $arg1type, string $arg1value, ArgTypeEnum $arg2type, string $arg2value)
     {
-        parent::__construct(OperationCodeEnum::MOVE);
+        parent::__construct(OperationCodeEnum::MOVE, $order);
         $this->arg1type = $arg1type;
         $this->arg1value = $arg1value;
         $this->arg2type = $arg2type;

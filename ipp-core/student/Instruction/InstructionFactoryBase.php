@@ -27,6 +27,11 @@ abstract class InstructionFactoryBase
         }
     }
 
+    protected function GetInstructionOrder(DOMNode $node) : int
+    {
+        return $node->attributes->getNamedItem("order")->nodeValue;
+    }
+
     protected function GetArgTypeAndValue($arg, &$type, &$value) : void
     {
         $type = $this->Convert2ArgType($arg->attributes->getNamedItem("type")->nodeValue);

@@ -15,9 +15,16 @@ abstract class InstructionBase implements IInstruction
         $this->opcode = $opcode;
     }
 
+    private int $order;
+    public function getOrder() : int
+    {
+        return $this->order;
+    }
+
     // CONSTRUCTOR
-    public function __construct(OperationCodeEnum $opcode)
+    public function __construct(OperationCodeEnum $opcode, int $order)
     {
         $this->opcode = $opcode;
+        $this->order = $order;
     }
 }

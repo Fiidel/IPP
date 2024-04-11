@@ -8,6 +8,8 @@ class MoveInstructionFactory extends InstructionFactoryBase
 {
     public function CreateInstruction(DOMNode $XmlNode) : MoveInstruction
     {
+        $order = parent::GetInstructionOrder($XmlNode);
+
         $args = $XmlNode->childNodes;
         foreach ($args as $arg)
         {
@@ -30,7 +32,7 @@ class MoveInstructionFactory extends InstructionFactoryBase
         // TODO: convert to proper data type (eg. an int and not string)?
         //      or it's probably better to keep it as a string because the type might vary (eg. could be int or a string symbol)
 
-        $moveInstruction = new MoveInstruction($arg1type, $arg1value, $arg2type, $arg2value);
-        return $moveInstruction;
+        $instruction = new MoveInstruction($order, $arg1type, $arg1value, $arg2type, $arg2value);
+        return $instruction;
     }
 }
