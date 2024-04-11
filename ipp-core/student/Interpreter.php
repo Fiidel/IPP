@@ -2,6 +2,7 @@
 
 namespace IPP\Student;
 
+use IPP\Student\Instruction\InstructionParser;
 use IPP\Core\AbstractInterpreter;
 use IPP\Core\Exception\NotImplementedException;
 

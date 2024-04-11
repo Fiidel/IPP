@@ -5,8 +5,8 @@ namespace IPP\Student\Instruction;
 abstract class InstructionBase implements IInstruction
 {
     // PROPERTIES
-    private OperationCode $opcode;
-    public function getOpcode() : OperationCode
+    private OperationCodeEnum $opcode;
+    public function getOpcode() : OperationCodeEnum
     {
         return $this->opcode;
     }
@@ -16,7 +16,7 @@ abstract class InstructionBase implements IInstruction
     }
 
     // CONSTRUCTOR
-    public function __construct(OperationCode $opcode)
+    public function __construct(OperationCodeEnum $opcode)
     {
         $this->opcode = $opcode;
     }

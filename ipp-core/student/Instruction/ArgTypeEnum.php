@@ -2,7 +2,7 @@
 
 namespace IPP\Student\Instruction;
 
-enum ArgType
+enum ArgTypeEnum
 {
     case var;
     case string;

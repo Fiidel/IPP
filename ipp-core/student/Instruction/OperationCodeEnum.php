@@ -2,7 +2,7 @@
 
 namespace IPP\Student\Instruction;
 
-enum OperationCode
+enum OperationCodeEnum
 {
     case MOVE;
     // TODO: a lot of missing opcodes

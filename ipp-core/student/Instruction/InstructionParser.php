@@ -1,6 +1,6 @@
 <?php
 
-namespace IPP\Student;
+namespace IPP\Student\Instruction;
 
 use DOMNodeList;
 
@@ -16,6 +16,8 @@ class InstructionParser
             switch ($opcode) {
                 case "MOVE":
                     // TODO: create MOVE instruction and store somewhere
+                    $factory = new MoveInstructionFactory;
+                    $factory->CreateInstruction($instr);
                     break;
                 
                 default:
