@@ -27,9 +27,9 @@ abstract class InstructionFactoryBase
         }
     }
 
-    protected function ProcessArgument(DOMNode $arg)
+    protected function GetArgTypeAndValue($arg, &$type, &$value) : void
     {
-        // TODO
-
+        $type = $this->Convert2ArgType($arg->attributes->getNamedItem("type")->nodeValue);
+        $value = trim($arg->nodeValue);
     }
 }
