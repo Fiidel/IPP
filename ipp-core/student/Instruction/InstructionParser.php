@@ -3,17 +3,19 @@
 namespace IPP\Student\Instruction;
 
 use DOMNodeList;
+use IPP\Student\LinkedList\LinkedList;
 
 class InstructionParser
 {
-    public function ParseDomList2Instructions(DOMNodeList $instructions) : void // TODO: return success/fail? or specific return code
+    public function ParseDomList2Instructions(DOMNodeList $instructions) : LinkedList
     {
+        $instructionList = new LinkedList;
+
         foreach ($instructions as $instr)
         {
             $attributes = $instr->attributes;
             $opcode = $attributes->getNamedItem("opcode")->nodeValue;
 
-            // TODO: store instructions somewhere
             switch ($opcode)
             {
                 case "DEFVAR":
@@ -31,8 +33,10 @@ class InstructionParser
 
             if ($factory != null)
             {
-                $factory->CreateInstruction($instr);
+                // create instruction and insert into list
+                $instructionList->InsertLast($factory->CreateInstruction($instr));
             }
         }
+        return $instructionList;
     }
 }
