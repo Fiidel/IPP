@@ -7,7 +7,7 @@ use IPP\Student\Instruction\InstructionBase;
 class LinkedListNode
 {
     private $instruction;
-    public function getInstruction() : InstructionBase
+    public function getInstruction() : ?InstructionBase
     {
         return $this->instruction;
     }
@@ -17,12 +17,18 @@ class LinkedListNode
     }
 
     private $nextInstruction;
-    public function getNextInstruction() : InstructionBase
+    public function getNextInstruction() : ?InstructionBase
     {
         return $this->nextInstruction;
     }
     public function setNextInstruction(InstructionBase $instruction)
     {
         $this->nextInstruction = $instruction;
+    }
+
+    public function __construct()
+    {
+        $this->instruction = null;
+        $this->nextInstruction = null;
     }
 }
