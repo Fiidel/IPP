@@ -13,7 +13,7 @@ class LinkedList
         $this->head = null;
     }
 
-    public function InsertLast(InstructionBase $instruction)
+    public function InsertLast(InstructionBase $instruction) : void
     {
         $node = new LinkedListNode($instruction);
         
@@ -30,5 +30,16 @@ class LinkedList
             }
             $currentNode->setNextNode($node);
         }
+    }
+
+    public function GetInstructionWithOrder(int $order) : ?InstructionBase
+    {
+        $currentNode = $this->head;
+
+        while ($currentNode != null && $currentNode->getInstruction()->getOrder() != $order)
+        {
+            $currentNode = $currentNode->getNextNode();
+        }
+        return $currentNode;
     }
 }
