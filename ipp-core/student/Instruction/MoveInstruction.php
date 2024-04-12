@@ -2,6 +2,8 @@
 
 namespace IPP\Student\Instruction;
 
+use IPP\Student\Visitor;
+
 class MoveInstruction extends InstructionBase
 {
     // PROPERTIES
@@ -19,5 +21,11 @@ class MoveInstruction extends InstructionBase
         $this->arg1value = $arg1value;
         $this->arg2type = $arg2type;
         $this->arg2value = $arg2value;
+    }
+
+    // VISITOR ACCEPT
+    public function accept(Visitor $visitor) : void
+    {
+        $visitor->visitMoveInstruction($this);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace IPP\Student\Instruction;
 
+use IPP\Student\Visitor;
+
 class DefvarInstruction extends InstructionBase
 {
     // PROPERTIES
@@ -15,5 +17,11 @@ class DefvarInstruction extends InstructionBase
         parent::__construct(OperationCodeEnum::DEFVAR, $order);
         $this->arg1type = $arg1type;
         $this->arg1value = $arg1value;
+    }
+
+    // VISITOR ACCEPT
+    public function accept(Visitor $visitor) : void
+    {
+        $visitor->visitDefvarInstruction($this);
     }
 }

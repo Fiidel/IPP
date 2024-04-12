@@ -3,7 +3,6 @@
 namespace IPP\Student;
 
 use IPP\Student\Instruction\InstructionParser;
-use IPP\Student\LinkedList\LinkedList;
 use IPP\Core\AbstractInterpreter;
 use IPP\Core\Exception\NotImplementedException;
 use IPP\Student\AST\ASTConverter;
