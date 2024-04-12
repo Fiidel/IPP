@@ -26,6 +26,14 @@ class Interpreter extends AbstractInterpreter
         $ASTConverter = new ASTConverter;
         $AST = $ASTConverter->ParseInstructions2AST($instructionList);
 
+        $currentNode = $AST->GetHead();
+        $visitor = new Visitor;
+        while ($currentNode != null)
+        {
+            $currentNode->instruction->accept($visitor);
+            $currentNode = $currentNode->nextInstruction;
+        }
+
         return 0;
     }
 }

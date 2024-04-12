@@ -7,6 +7,10 @@ use IPP\Student\Instruction\InstructionBase;
 class AST
 {
     private $head;
+    public function GetHead() : ?ASTNode
+    {
+        return $this->head;
+    }
 
     public function __construct()
     {
