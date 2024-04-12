@@ -11,10 +11,6 @@ class LinkedListNode
     {
         return $this->instruction;
     }
-    public function setInstruction(InstructionBase $instruction)
-    {
-        $this->instruction = $instruction;
-    }
 
     private $nextInstruction;
     public function getNextInstruction() : ?InstructionBase
@@ -26,9 +22,9 @@ class LinkedListNode
         $this->nextInstruction = $instruction;
     }
 
-    public function __construct()
+    public function __construct(InstructionBase $instruction)
     {
-        $this->instruction = null;
+        $this->instruction = $instruction;
         $this->nextInstruction = null;
     }
 }
