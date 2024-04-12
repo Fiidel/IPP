@@ -40,6 +40,14 @@ class LinkedList
         {
             $currentNode = $currentNode->getNextNode();
         }
-        return $currentNode;
+        
+        if ($currentNode == null)
+        {
+            return null;
+        }
+        else
+        {
+            return $currentNode->getInstruction();
+        }
     }
 }
