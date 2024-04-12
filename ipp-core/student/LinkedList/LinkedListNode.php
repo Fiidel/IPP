@@ -12,19 +12,19 @@ class LinkedListNode
         return $this->instruction;
     }
 
-    private $nextInstruction;
-    public function getNextInstruction() : ?InstructionBase
+    private $nextNode;
+    public function getNextNode() : ?LinkedListNode
     {
-        return $this->nextInstruction;
+        return $this->nextNode;
     }
-    public function setNextInstruction(InstructionBase $instruction)
+    public function setNextNode(LinkedListNode $node)
     {
-        $this->nextInstruction = $instruction;
+        $this->nextNode = $node;
     }
 
     public function __construct(InstructionBase $instruction)
     {
         $this->instruction = $instruction;
-        $this->nextInstruction = null;
+        $this->nextNode = null;
     }
 }
