@@ -8,7 +8,12 @@ class DefvarInstruction extends InstructionBase
 {
     // PROPERTIES
     private ArgTypeEnum $arg1type;
+    
     private string $arg1value;
+    public function GetArg1Value() : string
+    {
+        return $this->arg1value;
+    }
 
     // CONSTRUCTOR
     public function __construct
