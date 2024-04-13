@@ -24,8 +24,8 @@ class Visitor
 
     private function GetDeclaredVariable(string $variable) : ?VarListNode
     {
-        $frame = preg_filter("/@[.]/", "", $variable);
-        $identifier = preg_filter("/[.]@/", "", $variable);
+        $frame = preg_filter("/@(.*)$/", "", $variable);
+        $identifier = preg_filter("/^(.*)@/", "", $variable);
 
         if ($frame == "GF")
         {
