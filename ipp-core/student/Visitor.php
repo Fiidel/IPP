@@ -15,6 +15,7 @@ class Visitor
         $this->globalFrame = new VarLinkedList;
     }
 
+    // DEFVAR
     public function visitDefvarInstruction(DefvarInstruction $instruction)
     {
         echo "Defvar\n";
@@ -37,6 +38,7 @@ class Visitor
         // todo: other frames
     }
 
+    // MOVE
     public function visitMoveInstruction(MoveInstruction $instruction)
     {
         echo "Move\n";
@@ -53,7 +55,7 @@ class Visitor
             else
             {
                 $varInGF->setValue($instruction->GetArg2Value());
-                // TODO: convert to propert datatype based on $instruction->GetArg2Type()
+                // TODO: convert to proper datatype based on $instruction->GetArg2Type()
             }
         }
     }
