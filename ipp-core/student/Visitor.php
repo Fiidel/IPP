@@ -2,6 +2,7 @@
 
 namespace IPP\Student;
 
+use IPP\Student\Instruction\ArgTypeEnum;
 use IPP\Student\Instruction\ArithmeticInstruction;
 use IPP\Student\LinkedList\VarLinkedList;
 use IPP\Student\Instruction\DefvarInstruction;
@@ -84,8 +85,36 @@ class Visitor
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
         if ($var != null)
         {
-            $var->setValue($instruction->GetArg2Value());
+            $type = $instruction->getArg2Type();
+
+            // for var
+            if ($type == ArgTypeEnum::var)
+            {
+                $varNode = $this->GetDeclaredVariable($instruction->getArg2Value());
+                // GetDeclaredVariable() is expected to exit if var is not declared, otherwise a null check is necessary here:
+                $value = $varNode->getValue();
+            }
+
+            // for const
+            else
+            {
+                switch ($type)
+                {
+                    case ArgTypeEnum::string:
+                        $value = $instruction->getArg2Value();
+                        break;
+                    
+                    // TODO: other
+
+                    default:
+                        break;
+                }
+            }
+
+            // save value
+            $var->setValue($value);
         }
+
         // TODO: convert to proper datatype based on $instruction->GetArg2Type()
     }
 
