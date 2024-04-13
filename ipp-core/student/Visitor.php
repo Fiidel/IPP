@@ -40,5 +40,33 @@ class Visitor
     public function visitMoveInstruction(MoveInstruction $instruction)
     {
         echo "Move\n";
+
+        $variable = preg_filter("/GF@/", "", $instruction->GetArg1Value());
+        if ($variable != null)
+        {
+            $varInGF = $this->globalFrame->GetVarWithIdentifier($variable);
+            if ($varInGF == null)
+            {
+                echo "var $variable not declared in GF\n";
+                // TODO: error, exit code
+            }
+            else
+            {
+                $varInGF->setValue($instruction->GetArg2Value());
+                // TODO: convert to propert datatype based on $instruction->GetArg2Type()
+            }
+        }
+    }
+
+    // DEBUG
+    public function PrintGF()
+    {
+        echo "Current Global Frame\n------------------\n";
+        $currentVar = $this->globalFrame->getHead();
+        while ($currentVar != null)
+        {
+            echo $currentVar->getIdentifier() . ": " . $currentVar->getValue() . "\n";
+            $currentVar = $currentVar->getNextNode();
+        }
     }
 }

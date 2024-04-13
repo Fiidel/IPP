@@ -33,6 +33,7 @@ class Interpreter extends AbstractInterpreter
             $currentNode->instruction->accept($visitor);
             $currentNode = $currentNode->nextInstruction;
         }
+        $visitor->PrintGF();
 
         return 0;
     }
