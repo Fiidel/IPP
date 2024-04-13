@@ -127,16 +127,14 @@ class Visitor
         echo "Move\n";
 
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
-        if ($var != null)
-        {
-            $argType = $instruction->getArg2Type();
-            $argValue = $instruction->getArg2Value();
+        // GetDeclaredVariable() exits if the given var isn't declared, otherwise a null check would be necessary here
+        $argType = $instruction->getArg2Type();
+        $argValue = $instruction->getArg2Value();
 
-            $value = $this->GetValueBasedOnType($argType, $argValue);
+        $value = $this->GetValueBasedOnType($argType, $argValue);
 
-            // save value
-            $var->setValue($value);
-        }
+        // save value
+        $var->setValue($value);
     }
 
     // ADD
