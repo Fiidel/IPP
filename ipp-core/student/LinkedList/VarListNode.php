@@ -33,6 +33,7 @@ class VarListNode
     public function __construct(string $identifier)
     {
         $this->identifier = $identifier;
+        $this->value = null;
         $this->nextNode = null;
     }
 }
