@@ -141,11 +141,24 @@ class Visitor
     public function visitArithmeticInstruction(ArithmeticInstruction $instruction)
     {
         echo "Arithmetic ";
+        
+        $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
+        // GetDeclaredVariable() exits if the given var isn't declared, otherwise a null check would be necessary here
+        
+        // TODO: check args are var or int
+        $argType1 = $instruction->getArg2Type();
+        $argValue1 = $instruction->getArg2Value();
+        $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
+
+        $argType2 = $instruction->getArg3Type();
+        $argValue2 = $instruction->getArg3Value();
+        $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
+
         switch ($instruction->getOpcode())
         {
             case OperationCodeEnum::ADD:
                 echo "of type ADD\n";
-                
+                $result = $value1 + $value2;
                 break;
             
             case OperationCodeEnum::SUB:
@@ -163,6 +176,8 @@ class Visitor
             default:
                 break;
         }
+
+        $var->setValue($result);
     }
 
     // ===========================================
