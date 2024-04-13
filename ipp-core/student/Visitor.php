@@ -6,6 +6,7 @@ use IPP\Student\Instruction\ArithmeticInstruction;
 use IPP\Student\LinkedList\VarLinkedList;
 use IPP\Student\Instruction\DefvarInstruction;
 use IPP\Student\Instruction\MoveInstruction;
+use IPP\Student\Instruction\OperationCodeEnum;
 
 class Visitor
 {
@@ -64,7 +65,28 @@ class Visitor
     // ADD
     public function visitArithmeticInstruction(ArithmeticInstruction $instruction)
     {
-        echo "Arithmetic\n";
+        echo "Arithmetic ";
+        switch ($instruction->getOpcode())
+        {
+            case OperationCodeEnum::ADD:
+                echo "of type ADD\n";
+                break;
+            
+            case OperationCodeEnum::SUB:
+                echo "of type SUB\n";
+                break;
+
+            case OperationCodeEnum::MUL:
+                echo "of type MUL\n";
+                break;
+
+            case OperationCodeEnum::IDIV:
+                echo "of type IDIV\n";
+                break;
+
+            default:
+                break;
+        }
     }
 
     // ----------------------------------

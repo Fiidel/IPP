@@ -27,6 +27,9 @@ class InstructionParser
                     break;
 
                 case "ADD":
+                case "SUB":
+                case "MUL":
+                case "IDIV":
                     $factory = new ArithmeticInstructionFactory;
                     break;
                 
