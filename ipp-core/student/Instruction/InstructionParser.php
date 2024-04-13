@@ -27,7 +27,7 @@ class InstructionParser
                     break;
 
                 case "ADD":
-                    $factory = new AddInstructionFactory;
+                    $factory = new ArithmeticInstructionFactory;
                     break;
                 
                 default:

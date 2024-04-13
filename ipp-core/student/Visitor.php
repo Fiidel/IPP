@@ -2,7 +2,7 @@
 
 namespace IPP\Student;
 
-use IPP\Student\Instruction\AddInstruction;
+use IPP\Student\Instruction\ArithmeticInstruction;
 use IPP\Student\LinkedList\VarLinkedList;
 use IPP\Student\Instruction\DefvarInstruction;
 use IPP\Student\Instruction\MoveInstruction;
@@ -62,9 +62,9 @@ class Visitor
     }
 
     // ADD
-    public function visitAddInstruction(AddInstruction $instruction)
+    public function visitArithmeticInstruction(ArithmeticInstruction $instruction)
     {
-        echo "Add\n";
+        echo "Arithmetic\n";
     }
 
     // ----------------------------------

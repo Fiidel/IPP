@@ -4,7 +4,7 @@ namespace IPP\Student\Instruction;
 
 use IPP\Student\Visitor;
 
-class AddInstruction extends InstructionBase
+class ArithmeticInstruction extends InstructionBase
 {
     // PROPERTIES
     private ArgTypeEnum $arg1type;
@@ -40,9 +40,10 @@ class AddInstruction extends InstructionBase
 
     // CONSTRUCTOR
     public function __construct
-        (int $order, ArgTypeEnum $arg1type, string $arg1value, ArgTypeEnum $arg2type, string $arg2value, ArgTypeEnum $arg3type, string $arg3value)
+        (OperationCodeEnum $operationType, int $order, 
+        ArgTypeEnum $arg1type, string $arg1value, ArgTypeEnum $arg2type, string $arg2value, ArgTypeEnum $arg3type, string $arg3value)
     {
-        parent::__construct(OperationCodeEnum::ADD, $order);
+        parent::__construct($operationType, $order);
         $this->arg1type = $arg1type;
         $this->arg1value = $arg1value;
         $this->arg2type = $arg2type;
@@ -54,6 +55,6 @@ class AddInstruction extends InstructionBase
     // VISITOR ACCEPT
     public function accept(Visitor $visitor) : void
     {
-        $visitor->visitAddInstruction($this);
+        $visitor->visitArithmeticInstruction($this);
     }
 }

@@ -27,9 +27,49 @@ abstract class InstructionFactoryBase
         }
     }
 
+    protected function Convert2OpcodeType(string $opcodeType) : OperationCodeEnum
+    {
+        switch ($opcodeType)
+        {
+            case 'DEFVAR':
+                return OperationCodeEnum::DEFVAR;
+                break;
+            
+            case 'MOVE':
+                return OperationCodeEnum::MOVE;
+                break;
+
+            case 'ADD':
+                return OperationCodeEnum::ADD;
+                break;
+
+            case 'SUB':
+                return OperationCodeEnum::SUB;
+                break;
+
+            case 'MUL':
+                return OperationCodeEnum::MUL;
+                break;
+
+            case 'IDIV':
+                return OperationCodeEnum::IDIV;
+                break;
+
+            // TODO: the rest of the cases
+
+            default:
+                break;
+        }
+    }
+
     protected function GetInstructionOrder(DOMNode $node) : int
     {
         return $node->attributes->getNamedItem("order")->nodeValue;
+    }
+
+    protected function GetInstructionOpcode(DOMNode $node) : OperationCodeEnum
+    {
+        return $this->Convert2OpcodeType($node->attributes->getNamedItem("opcode")->nodeValue);
     }
 
     protected function Get1ArgsTypeAndValue($args, &$type, &$value) : void
