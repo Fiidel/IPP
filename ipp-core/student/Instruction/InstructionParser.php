@@ -3,13 +3,13 @@
 namespace IPP\Student\Instruction;
 
 use DOMNodeList;
-use IPP\Student\LinkedList\LinkedList;
+use IPP\Student\LinkedList\InstructionLinkedList;
 
 class InstructionParser
 {
-    public function ParseDomList2Instructions(DOMNodeList $instructions) : LinkedList
+    public function ParseDomList2Instructions(DOMNodeList $instructions) : InstructionLinkedList
     {
-        $instructionList = new LinkedList;
+        $instructionList = new InstructionLinkedList;
 
         foreach ($instructions as $instr)
         {

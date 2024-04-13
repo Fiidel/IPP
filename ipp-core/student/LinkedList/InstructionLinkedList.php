@@ -4,7 +4,7 @@ namespace IPP\Student\LinkedList;
 
 use IPP\Student\Instruction\InstructionBase;
 
-class LinkedList
+class InstructionLinkedList
 {
     private $head;
 

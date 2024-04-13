@@ -2,11 +2,11 @@
 
 namespace IPP\Student\AST;
 
-use IPP\Student\LinkedList\LinkedList;
+use IPP\Student\LinkedList\InstructionLinkedList;
 
 class ASTConverter
 {
-    public function ParseInstructions2AST(LinkedList $instructionList) : AST
+    public function ParseInstructions2AST(InstructionLinkedList $instructionList) : AST
     {
         $AST = new AST;
 
