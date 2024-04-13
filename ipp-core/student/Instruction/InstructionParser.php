@@ -25,6 +25,10 @@ class InstructionParser
                 case "MOVE":
                     $factory = new MoveInstructionFactory;
                     break;
+
+                case "ADD":
+                    $factory = new AddInstructionFactory;
+                    break;
                 
                 default:
                     $factory = null;

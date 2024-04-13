@@ -2,6 +2,7 @@
 
 namespace IPP\Student;
 
+use IPP\Student\Instruction\AddInstruction;
 use IPP\Student\LinkedList\VarLinkedList;
 use IPP\Student\Instruction\DefvarInstruction;
 use IPP\Student\Instruction\MoveInstruction;
@@ -59,6 +60,14 @@ class Visitor
             }
         }
     }
+
+    // ADD
+    public function visitAddInstruction(AddInstruction $instruction)
+    {
+        echo "Add\n";
+    }
+
+    // ----------------------------------
 
     // DEBUG
     public function PrintGF()
