@@ -9,8 +9,22 @@ class MoveInstruction extends InstructionBase
     // PROPERTIES
     private ArgTypeEnum $arg1type;
     private string $arg1value;
+    public function getArg1Value() : string
+    {
+        return $this->arg1value;
+    }
+
     private ArgTypeEnum $arg2type;
+    public function getArg2Type() : ArgTypeEnum
+    {
+        return $this->arg2type;
+    }
+
     private string $arg2value;
+    public function getArg2Value() : string
+    {
+        return $this->arg2value;
+    }
 
     // CONSTRUCTOR
     public function __construct
