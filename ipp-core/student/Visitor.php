@@ -49,6 +49,50 @@ class Visitor
         // TODO: other frames
     }
 
+    private function GetValueBasedOnType(ArgTypeEnum $argType, string $argValue)
+    {
+        // for var
+        if ($argType == ArgTypeEnum::var)
+        {
+            $varNode = $this->GetDeclaredVariable($argValue);
+            // GetDeclaredVariable() is expected to exit if var is not declared, otherwise a null check is necessary here:
+            $value = $varNode->getValue();
+        }
+
+        // for const
+        else
+        {
+            switch ($argType)
+            {
+                case ArgTypeEnum::string:
+                    $value = $argValue;
+                    // TODO: convert unicode sequences to chars in string
+                    break;
+                
+                case ArgTypeEnum::int:
+                    $value = (int) $argValue;
+                    break;
+
+                case ArgTypeEnum::bool:
+                    $value = (boolean) $argValue;
+                    break;
+
+                case ArgTypeEnum::nil:
+                    $value = "";
+                    break;
+
+                case ArgTypeEnum::label:
+                case ArgTypeEnum::type:
+                    $value = $argValue;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        return $value;
+    }
+
     // ===========================================
     // INSTRUCTION EXECUTION
     // ===========================================
@@ -85,47 +129,10 @@ class Visitor
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
         if ($var != null)
         {
-            $type = $instruction->getArg2Type();
+            $argType = $instruction->getArg2Type();
+            $argValue = $instruction->getArg2Value();
 
-            // for var
-            if ($type == ArgTypeEnum::var)
-            {
-                $varNode = $this->GetDeclaredVariable($instruction->getArg2Value());
-                // GetDeclaredVariable() is expected to exit if var is not declared, otherwise a null check is necessary here:
-                $value = $varNode->getValue();
-            }
-
-            // for const
-            else
-            {
-                switch ($type)
-                {
-                    case ArgTypeEnum::string:
-                        $value = $instruction->getArg2Value();
-                        // TODO: convert unicode sequences to chars in string
-                        break;
-                    
-                    case ArgTypeEnum::int:
-                        $value = (int) $instruction->getArg2Value();
-                        break;
-
-                    case ArgTypeEnum::bool:
-                        $value = (boolean) $instruction->getArg2Value();
-                        break;
-
-                    case ArgTypeEnum::nil:
-                        $value = "";
-                        break;
-
-                    case ArgTypeEnum::label:
-                    case ArgTypeEnum::type:
-                        $value = $instruction->getArg2Value();
-                        break;
-
-                    default:
-                        break;
-                }
-            }
+            $value = $this->GetValueBasedOnType($argType, $argValue);
 
             // save value
             $var->setValue($value);
@@ -140,6 +147,7 @@ class Visitor
         {
             case OperationCodeEnum::ADD:
                 echo "of type ADD\n";
+                
                 break;
             
             case OperationCodeEnum::SUB:
