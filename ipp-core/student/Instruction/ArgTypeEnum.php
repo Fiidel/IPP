@@ -6,5 +6,9 @@ enum ArgTypeEnum
 {
     case var;
     case string;
-    // TODO: a lot of missing argtypes
+    case int;
+    case bool;
+    case nil;
+    case label;
+    case type;
 }

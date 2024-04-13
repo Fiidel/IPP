@@ -20,9 +20,29 @@ abstract class InstructionFactoryBase
                 return ArgTypeEnum::string;
                 break;
             
-            // TODO: the rest of the cases
+            case 'int':
+                return ArgTypeEnum::int;
+                break;
 
+            case 'bool':
+                return ArgTypeEnum::bool;
+                break;
+
+            case 'nil':
+                return ArgTypeEnum::nil;
+                break;
+
+            case 'label':
+                return ArgTypeEnum::label;
+                break;
+
+            case 'type':
+                return ArgTypeEnum::type;
+                break;
+            
             default:
+                // TODO: error message?
+                exit(52);
                 break;
         }
     }

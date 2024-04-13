@@ -102,9 +102,25 @@ class Visitor
                 {
                     case ArgTypeEnum::string:
                         $value = $instruction->getArg2Value();
+                        // TODO: convert unicode sequences to chars in string
                         break;
                     
-                    // TODO: other
+                    case ArgTypeEnum::int:
+                        $value = (int) $instruction->getArg2Value();
+                        break;
+
+                    case ArgTypeEnum::bool:
+                        $value = (boolean) $instruction->getArg2Value();
+                        break;
+
+                    case ArgTypeEnum::nil:
+                        $value = "";
+                        break;
+
+                    case ArgTypeEnum::label:
+                    case ArgTypeEnum::type:
+                        $value = $instruction->getArg2Value();
+                        break;
 
                     default:
                         break;
@@ -114,8 +130,6 @@ class Visitor
             // save value
             $var->setValue($value);
         }
-
-        // TODO: convert to proper datatype based on $instruction->GetArg2Type()
     }
 
     // ADD
