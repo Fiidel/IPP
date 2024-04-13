@@ -5,6 +5,10 @@ namespace IPP\Student\LinkedList;
 class VarLinkedList
 {
     private $head;
+    public function getHead() : ?VarListNode
+    {
+        return $this->head;
+    }
 
     public function __construct()
     {
