@@ -15,7 +15,7 @@ class LinkedList
 
     public function InsertLast(InstructionBase $instruction) : void
     {
-        $node = new LinkedListNode($instruction);
+        $node = new InstructionListNode($instruction);
         
         if ($this->head == null)
         {

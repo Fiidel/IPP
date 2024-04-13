@@ -4,7 +4,7 @@ namespace IPP\Student\LinkedList;
 
 use IPP\Student\Instruction\InstructionBase;
 
-class LinkedListNode
+class InstructionListNode
 {
     private $instruction;
     public function getInstruction() : ?InstructionBase
@@ -13,11 +13,11 @@ class LinkedListNode
     }
 
     private $nextNode;
-    public function getNextNode() : ?LinkedListNode
+    public function getNextNode() : ?InstructionListNode
     {
         return $this->nextNode;
     }
-    public function setNextNode(LinkedListNode $node)
+    public function setNextNode(InstructionListNode $node)
     {
         $this->nextNode = $node;
     }
