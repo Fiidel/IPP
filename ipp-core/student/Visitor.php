@@ -7,6 +7,7 @@ use IPP\Student\LinkedList\VarLinkedList;
 use IPP\Student\Instruction\DefvarInstruction;
 use IPP\Student\Instruction\MoveInstruction;
 use IPP\Student\Instruction\OperationCodeEnum;
+use IPP\Student\LinkedList\VarListNode;
 
 class Visitor
 {
@@ -16,6 +17,40 @@ class Visitor
     {
         $this->globalFrame = new VarLinkedList;
     }
+
+    // ===========================================
+    // HELPER METHODS
+    // ===========================================
+
+    private function GetDeclaredVariable(string $variable) : ?VarListNode
+    {
+        $frame = preg_filter("/@[.]/", "", $variable);
+        $identifier = preg_filter("/[.]@/", "", $variable);
+
+        if ($frame == "GF")
+        {
+            $varInGF = $this->globalFrame->GetVarWithIdentifier($identifier);
+            if ($varInGF == null)
+            {
+                echo "var $variable not declared in GF\n";
+                return null;
+                // TODO: error, exit code
+            }
+            else
+            {
+                return $varInGF;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        // TODO: other frames
+    }
+
+    // ===========================================
+    // INSTRUCTION EXECUTION
+    // ===========================================
 
     // DEFVAR
     public function visitDefvarInstruction(DefvarInstruction $instruction)
@@ -45,21 +80,12 @@ class Visitor
     {
         echo "Move\n";
 
-        $variable = preg_filter("/GF@/", "", $instruction->GetArg1Value());
-        if ($variable != null)
+        $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
+        if ($var != null)
         {
-            $varInGF = $this->globalFrame->GetVarWithIdentifier($variable);
-            if ($varInGF == null)
-            {
-                echo "var $variable not declared in GF\n";
-                // TODO: error, exit code
-            }
-            else
-            {
-                $varInGF->setValue($instruction->GetArg2Value());
-                // TODO: convert to proper datatype based on $instruction->GetArg2Type()
-            }
+            $var->setValue($instruction->GetArg2Value());
         }
+        // TODO: convert to proper datatype based on $instruction->GetArg2Type()
     }
 
     // ADD
@@ -89,9 +115,10 @@ class Visitor
         }
     }
 
-    // ----------------------------------
-
+    // ===========================================
     // DEBUG
+    // ===========================================
+
     public function PrintGF()
     {
         echo "Current Global Frame\n------------------\n";
