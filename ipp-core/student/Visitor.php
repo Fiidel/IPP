@@ -32,9 +32,9 @@ class Visitor
             $varInGF = $this->globalFrame->GetVarWithIdentifier($identifier);
             if ($varInGF == null)
             {
+                // TODO: remove echo (or print it to stderr, idk)
                 echo "var $variable not declared in GF\n";
-                return null;
-                // TODO: error, exit code
+                exit(54);
             }
             else
             {
@@ -67,12 +67,13 @@ class Visitor
             }
             else
             {
+                // TODO: remove echo (or print it to stderr, idk)
                 echo "var $value already declared in GF\n";
-                // TODO: error, exit code
+                exit(52);
             }
         }
 
-        // todo: other frames
+        // TODO: other frames
     }
 
     // MOVE
