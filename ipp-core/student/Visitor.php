@@ -163,14 +163,24 @@ class Visitor
             
             case OperationCodeEnum::SUB:
                 echo "of type SUB\n";
+                $result = $value1 - $value2;
                 break;
 
             case OperationCodeEnum::MUL:
                 echo "of type MUL\n";
+                $result = $value1 * $value2;
                 break;
 
             case OperationCodeEnum::IDIV:
                 echo "of type IDIV\n";
+                if ($value2 == 0)
+                {
+                    exit(57);
+                }
+                else
+                {
+                    $result = (int) ($value1 / $value2);
+                }
                 break;
 
             default:
