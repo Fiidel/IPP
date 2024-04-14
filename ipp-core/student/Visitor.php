@@ -17,6 +17,7 @@ use IPP\Student\Instruction\NotInstruction;
 use IPP\Student\Instruction\OperationCodeEnum;
 use IPP\Student\Instruction\OrInstruction;
 use IPP\Student\Instruction\PlaceholderInstruction;
+use IPP\Student\Instruction\RelationInstruction;
 use IPP\Student\Instruction\WriteInstruction;
 use IPP\Student\LinkedList\VarListNode;
 
@@ -405,6 +406,12 @@ class Visitor
         {
             $var->setValue(true);
         }
+    }
+
+    // RELATION
+    public function visitRelationInstruction(RelationInstruction $instruction)
+    {
+        echo "Relation\n";
     }
 
     // PLACEHOLDER

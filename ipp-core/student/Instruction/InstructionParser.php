@@ -50,6 +50,12 @@ class InstructionParser
                 case "NOT":
                     $factory = new BoolInstructionFactory;
                     break;
+
+                case "LT":
+                case "GT":
+                case "EQ":
+                    $factory = new RelationInstructionFactory;
+                    break;
                 
                 default:
                     $factory = new PlaceholderInstructionFactory;

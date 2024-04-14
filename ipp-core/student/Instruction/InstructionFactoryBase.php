@@ -107,6 +107,18 @@ abstract class InstructionFactoryBase
                 return OperationCodeEnum::NOT;
                 break;
 
+            case "LT":
+                return OperationCodeEnum::LT;
+                break;
+
+            case "GT":
+                return OperationCodeEnum::GT;
+                break;
+
+            case "EQ":
+                return OperationCodeEnum::EQ;
+                break;
+
 
             // TODO: the rest of the cases
 

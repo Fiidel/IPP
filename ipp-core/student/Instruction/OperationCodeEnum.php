@@ -19,6 +19,9 @@ enum OperationCodeEnum
     case AND;
     case OR;
     case NOT;
+    case LT;
+    case GT;
+    case EQ;
 
     case PLACEHOLDER;
     // TODO: a lot of missing opcodes
