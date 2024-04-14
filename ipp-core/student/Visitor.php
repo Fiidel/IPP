@@ -265,7 +265,7 @@ class Visitor
     }
 
     // CONDITIONAL JUMP
-    public function visitConditionalJumpInstruction(ConditionalJumpInstruction $instruction)
+    public function visitConditionalJumpInstruction(ConditionalJumpInstruction $instruction) : bool
     {
         echo "Conditional Jump\n";
 
