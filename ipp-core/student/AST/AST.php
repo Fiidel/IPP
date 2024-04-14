@@ -17,7 +17,7 @@ class AST
         $this->head = null;
     }
 
-    public function InsertNext(InstructionBase $instruction)
+    public function InsertNext(InstructionBase $instruction) : ASTNode
     {
         $node = new ASTNode($instruction);
 
@@ -34,5 +34,6 @@ class AST
             }
             $currentNode->nextInstruction = $node;
         }
+        return $node;
     }
 }

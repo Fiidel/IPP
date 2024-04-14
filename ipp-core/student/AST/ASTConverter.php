@@ -2,6 +2,8 @@
 
 namespace IPP\Student\AST;
 
+use IPP\Student\Instruction\JumpInstruction;
+use IPP\Student\Instruction\OperationCodeEnum;
 use IPP\Student\LinkedList\InstructionLinkedList;
 
 class ASTConverter
@@ -12,7 +14,10 @@ class ASTConverter
 
         // TODO: missing order number? (this method presumes that once it gets null, that's where the program ends)
 
+        // first pass
         $order = 1;
+        $labels = [];
+
         while (true)
         {
             $instruction = $instructionList->GetInstructionWithOrder($order);
@@ -21,8 +26,52 @@ class ASTConverter
                 break;
             }
 
-            $AST->InsertNext($instruction);
+            $node = $AST->InsertNext($instruction);
+            
+            // save LABEL instruction nodes under their name
+            if ($instruction->getOpcode() == OperationCodeEnum::LABEL)
+            {
+                $labelName = $instruction->getArg1Value();
+
+                // error checking: trying to define a label of the same identifier more than once
+                if (array_key_exists($labelName, $labels))
+                {
+                    // TODO: error message?
+                    exit(52);
+                }
+
+                $labels[$labelName] = $node;
+            }
+
             $order += 1;
+        }
+
+        // second pass - filling in labels
+        $currentNode = $AST->GetHead();
+        while ($currentNode != null)
+        {
+            
+            switch ($currentNode->instruction->getOpcode())
+            {
+                case OperationCodeEnum::JUMP:
+                case OperationCodeEnum::JUMPIFEQ:
+                case OperationCodeEnum::JUMPIFNEQ:
+                    // get the ID of the label from instruction
+                    $label = $currentNode->instruction->getArg1Value();
+
+                    // get the ASTNode based on label ID from array
+                    $labelNode = $labels[$label];
+
+                    // set ASTNode as label node to jump to
+                    $currentNode->labelNode = $labelNode;
+
+                    break;
+                
+                default:
+                    break;
+            }
+
+            $currentNode = $currentNode->nextInstruction;
         }
 
         return $AST;
