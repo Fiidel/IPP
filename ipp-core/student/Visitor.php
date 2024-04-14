@@ -2,6 +2,7 @@
 
 namespace IPP\Student;
 
+use IPP\Core\Interface\OutputWriter;
 use IPP\Student\Instruction\ArgTypeEnum;
 use IPP\Student\Instruction\ArithmeticInstruction;
 use IPP\Student\Instruction\ConditionalJumpInstruction;
@@ -18,10 +19,12 @@ use IPP\Student\LinkedList\VarListNode;
 
 class Visitor
 {
+    private OutputWriter $stdout;
     private VarLinkedList $globalFrame;
 
-    public function __construct()
+    public function __construct(OutputWriter $stdout)
     {
+        $this->stdout = $stdout;
         $this->globalFrame = new VarLinkedList;
     }
 
@@ -230,7 +233,7 @@ class Visitor
             $value = "";
         }
         
-        echo $value;
+        $this->stdout->writeString($value);
     }
 
     // LABEL

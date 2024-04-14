@@ -12,7 +12,6 @@ class Interpreter extends AbstractInterpreter
     {
         // Check \IPP\Core\AbstractInterpreter for predefined I/O objects:
         // $val = $this->input->readString();
-        // $this->stdout->writeString("stdout");
         // $this->stderr->writeString("stderr");
 
         $dom = $this->source->getDOMDocument();
@@ -25,7 +24,7 @@ class Interpreter extends AbstractInterpreter
         $AST = $ASTConverter->ParseInstructions2AST($instructionList);
 
         $currentNode = $AST->GetHead();
-        $visitor = new Visitor;
+        $visitor = new Visitor($this->stdout);
         while ($currentNode != null)
         {
             // if $jump is returned true, the next node is the LABEL node that it's supposed to jump to
