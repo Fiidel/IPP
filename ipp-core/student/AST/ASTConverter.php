@@ -2,7 +2,9 @@
 
 namespace IPP\Student\AST;
 
+use IPP\Student\Instruction\ConditionalJumpInstruction;
 use IPP\Student\Instruction\JumpInstruction;
+use IPP\Student\Instruction\LabelInstruction;
 use IPP\Student\Instruction\OperationCodeEnum;
 use IPP\Student\LinkedList\InstructionLinkedList;
 
@@ -29,7 +31,7 @@ class ASTConverter
             $node = $AST->InsertNext($instruction);
             
             // save LABEL instruction nodes under their name
-            if ($instruction->getOpcode() == OperationCodeEnum::LABEL)
+            if ($instruction instanceof LabelInstruction)
             {
                 $labelName = $instruction->getArg1Value();
 
@@ -50,27 +52,19 @@ class ASTConverter
         $currentNode = $AST->GetHead();
         while ($currentNode != null)
         {
-            
-            switch ($currentNode->instruction->getOpcode())
+            if ($currentNode->instruction instanceof JumpInstruction
+                || $currentNode->instruction instanceof ConditionalJumpInstruction)
             {
-                case OperationCodeEnum::JUMP:
-                case OperationCodeEnum::JUMPIFEQ:
-                case OperationCodeEnum::JUMPIFNEQ:
-                    // get the ID of the label from instruction
-                    $label = $currentNode->instruction->getArg1Value();
+                // get the ID of the label from instruction
+                $label = $currentNode->instruction->getArg1Value();
 
-                    // get the ASTNode based on label ID from array
-                    $labelNode = $labels[$label];
+                // get the ASTNode based on label ID from array
+                $labelNode = $labels[$label];
 
-                    // set ASTNode as label node to jump to
-                    $currentNode->labelNode = $labelNode;
-
-                    break;
-                
-                default:
-                    break;
+                // set ASTNode as label node to jump to
+                $currentNode->labelNode = $labelNode;
             }
-
+            
             $currentNode = $currentNode->nextInstruction;
         }
 
