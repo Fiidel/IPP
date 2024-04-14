@@ -250,6 +250,46 @@ class Visitor
     public function visitConditionalJumpInstruction(ConditionalJumpInstruction $instruction)
     {
         echo "Conditional Jump\n";
+
+        // TODO: check args are of the same type or nil
+        $argType1 = $instruction->getArg2Type();
+        $argValue1 = $instruction->getArg2Value();
+        $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
+
+        $argType2 = $instruction->getArg3Type();
+        $argValue2 = $instruction->getArg3Value();
+        $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
+
+        switch ($instruction->getOpcode())
+        {
+            case OperationCodeEnum::JUMPIFEQ:
+                if ($value1 == $value2)
+                {
+                    $jump = true;
+                }
+                else
+                {
+                    $jump = false;
+                }
+                break;
+            
+            case OperationCodeEnum::JUMPIFNEQ:
+                if ($value1 != $value2)
+                {
+                    $jump = true;
+                }
+                else
+                {
+                    $jump = false;
+                }
+                break;
+
+            default:
+                $jump = false;
+                break;
+        }
+
+        return $jump;
     }
 
     // EXIT
