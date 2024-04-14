@@ -202,6 +202,30 @@ class Visitor
     public function visitWriteInstruction(WriteInstruction $instruction)
     {
         echo "Write\n";
+
+        $argType = $instruction->getArg1Type();
+        $argValue = $instruction->getArg1Value();
+        $value = $this->GetValueBasedOnType($argType, $argValue);
+
+        // some conversions are needed
+        $valueType = gettype($value);
+        if ($valueType == "boolean")
+        {
+            if ($value)
+            {
+                $value = "true";
+            }
+            else
+            {
+                $value = "false";
+            }
+        }
+        else if ($valueType == "NULL")
+        {
+            $value = "";
+        }
+        
+        echo $value;
     }
 
     // ===========================================
