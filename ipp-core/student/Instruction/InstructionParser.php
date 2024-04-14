@@ -44,6 +44,12 @@ class InstructionParser
                 case "EXIT":
                     $factory = new FlowInstructionFactory;
                     break;
+
+                case 'AND':
+                case "OR":
+                case "NOT":
+                    $factory = new BoolInstructionFactory;
+                    break;
                 
                 default:
                     $factory = new PlaceholderInstructionFactory;

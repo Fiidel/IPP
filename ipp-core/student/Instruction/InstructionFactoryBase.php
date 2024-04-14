@@ -95,6 +95,18 @@ abstract class InstructionFactoryBase
                 return OperationCodeEnum::EXIT;
                 break;
 
+            case 'AND':
+                return OperationCodeEnum::AND;
+                break;
+
+            case "OR":
+                return OperationCodeEnum::OR;
+                break;
+
+            case "NOT":
+                return OperationCodeEnum::NOT;
+                break;
+
 
             // TODO: the rest of the cases
 

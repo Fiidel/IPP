@@ -3,6 +3,7 @@
 namespace IPP\Student;
 
 use IPP\Core\Interface\OutputWriter;
+use IPP\Student\Instruction\AndInstruction;
 use IPP\Student\Instruction\ArgTypeEnum;
 use IPP\Student\Instruction\ArithmeticInstruction;
 use IPP\Student\Instruction\ConditionalJumpInstruction;
@@ -12,7 +13,9 @@ use IPP\Student\Instruction\ExitInstruction;
 use IPP\Student\Instruction\JumpInstruction;
 use IPP\Student\Instruction\LabelInstruction;
 use IPP\Student\Instruction\MoveInstruction;
+use IPP\Student\Instruction\NotInstruction;
 use IPP\Student\Instruction\OperationCodeEnum;
+use IPP\Student\Instruction\OrInstruction;
 use IPP\Student\Instruction\PlaceholderInstruction;
 use IPP\Student\Instruction\WriteInstruction;
 use IPP\Student\LinkedList\VarListNode;
@@ -328,6 +331,24 @@ class Visitor
         {
             exit(57);
         }
+    }
+
+    // AND
+    public function visitAndInstruction(AndInstruction $instruction)
+    {
+        echo "And\n";
+    }
+
+    // OR
+    public function visitOrInstruction(OrInstruction $instruction)
+    {
+        echo "Or\n";
+    }
+
+    // NOT
+    public function visitNotInstruction(NotInstruction $instruction)
+    {
+        echo "Not\n";
     }
 
     // PLACEHOLDER
