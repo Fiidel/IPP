@@ -8,6 +8,11 @@ class ExitInstruction extends InstructionBase
 {
     // PROPERTIES
     private ArgTypeEnum $arg1type;
+    public function getArg1Type() : ArgTypeEnum
+    {
+        return $this->arg1type;
+    }
+    
     private string $arg1value;
     public function getArg1Value() : string
     {

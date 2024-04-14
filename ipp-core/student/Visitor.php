@@ -296,6 +296,20 @@ class Visitor
     public function visitExitInstruction(ExitInstruction $instruction)
     {
         echo "Exit\n";
+
+        $argType = $instruction->getArg1Type();
+        $argValue = $instruction->getArg1Value();
+        $exitCode = $this->GetValueBasedOnType($argType, $argValue);
+        
+        // exit code must be a number from 0 to 9, otherwise error
+        if ($exitCode >= 0 && $exitCode <= 9)
+        {
+            exit($exitCode);
+        }
+        else
+        {
+            exit(57);
+        }
     }
 
     // PLACEHOLDER
