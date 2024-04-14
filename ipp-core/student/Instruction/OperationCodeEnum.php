@@ -10,5 +10,6 @@ enum OperationCodeEnum
     case SUB;
     case MUL;
     case IDIV;
+    case WRITE;
     // TODO: a lot of missing opcodes
 }

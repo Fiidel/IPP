@@ -32,6 +32,10 @@ class InstructionParser
                 case "IDIV":
                     $factory = new ArithmeticInstructionFactory;
                     break;
+
+                case "WRITE":
+                    $factory = new WriteInstructionFactory;
+                    break;
                 
                 default:
                     $factory = null;

@@ -8,6 +8,7 @@ use IPP\Student\LinkedList\VarLinkedList;
 use IPP\Student\Instruction\DefvarInstruction;
 use IPP\Student\Instruction\MoveInstruction;
 use IPP\Student\Instruction\OperationCodeEnum;
+use IPP\Student\Instruction\WriteInstruction;
 use IPP\Student\LinkedList\VarListNode;
 
 class Visitor
@@ -188,6 +189,12 @@ class Visitor
         }
 
         $var->setValue($result);
+    }
+
+    // WRITE
+    public function visitWriteInstruction(WriteInstruction $instruction)
+    {
+        echo "Write\n";
     }
 
     // ===========================================
