@@ -337,18 +337,74 @@ class Visitor
     public function visitAndInstruction(AndInstruction $instruction)
     {
         echo "And\n";
+
+        // TODO: check args types
+        $argType1 = $instruction->getArg2Type();
+        $argValue1 = $instruction->getArg2Value();
+        $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
+
+        $argType2 = $instruction->getArg3Type();
+        $argValue2 = $instruction->getArg3Value();
+        $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
+
+        $var = $this->GetDeclaredVariable($instruction->getArg1Value());
+
+        if ($value1 && $value2)
+        {
+            $var->setValue(true);
+        }
+        else
+        {
+            $var->setValue(false);
+        }
     }
 
     // OR
     public function visitOrInstruction(OrInstruction $instruction)
     {
         echo "Or\n";
+
+        // TODO: check args types
+        $argType1 = $instruction->getArg2Type();
+        $argValue1 = $instruction->getArg2Value();
+        $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
+
+        $argType2 = $instruction->getArg3Type();
+        $argValue2 = $instruction->getArg3Value();
+        $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
+
+        $var = $this->GetDeclaredVariable($instruction->getArg1Value());
+
+        if ($value1 || $value2)
+        {
+            $var->setValue(true);
+        }
+        else
+        {
+            $var->setValue(false);
+        }
     }
 
     // NOT
     public function visitNotInstruction(NotInstruction $instruction)
     {
         echo "Not\n";
+
+        // TODO: check args type
+        $argType = $instruction->getArg2Type();
+        $argValue = $instruction->getArg2Value();
+        $value = $this->GetValueBasedOnType($argType, $argValue);
+
+        $var = $this->GetDeclaredVariable($instruction->getArg1Value());
+
+        if ($value)
+        {
+            $var->setValue(false);
+        }
+        else
+        {
+            $var->setValue(true);
+        }
     }
 
     // PLACEHOLDER
