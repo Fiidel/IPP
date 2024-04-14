@@ -36,6 +36,14 @@ class InstructionParser
                 case "WRITE":
                     $factory = new WriteInstructionFactory;
                     break;
+
+                case "LABEL":
+                case "JUMP":
+                case "JUMPIFEQ":
+                case "JUMPIFNEQ":
+                case "EXIT":
+                    $factory = new FlowInstructionFactory;
+                    break;
                 
                 default:
                     $factory = null;

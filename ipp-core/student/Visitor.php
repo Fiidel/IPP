@@ -4,8 +4,12 @@ namespace IPP\Student;
 
 use IPP\Student\Instruction\ArgTypeEnum;
 use IPP\Student\Instruction\ArithmeticInstruction;
+use IPP\Student\Instruction\ConditionalJumpInstruction;
 use IPP\Student\LinkedList\VarLinkedList;
 use IPP\Student\Instruction\DefvarInstruction;
+use IPP\Student\Instruction\ExitInstruction;
+use IPP\Student\Instruction\JumpInstruction;
+use IPP\Student\Instruction\LabelInstruction;
 use IPP\Student\Instruction\MoveInstruction;
 use IPP\Student\Instruction\OperationCodeEnum;
 use IPP\Student\Instruction\WriteInstruction;
@@ -226,6 +230,30 @@ class Visitor
         }
         
         echo $value;
+    }
+
+    // LABEL
+    public function visitLabelInstruction(LabelInstruction $instruction)
+    {
+        echo "Label\n";
+    }
+
+    // JUMP
+    public function visitJumpInstruction(JumpInstruction $instruction)
+    {
+        echo "Jump\n";
+    }
+
+    // CONDITIONAL JUMP
+    public function visitConditionalJumpInstruction(ConditionalJumpInstruction $instruction)
+    {
+        echo "Conditional Jump\n";
+    }
+
+    // EXIT
+    public function visitExitInstruction(ExitInstruction $instruction)
+    {
+        echo "Exit\n";
     }
 
     // ===========================================

@@ -11,5 +11,10 @@ enum OperationCodeEnum
     case MUL;
     case IDIV;
     case WRITE;
+    case LABEL;
+    case JUMP;
+    case JUMPIFEQ;
+    case JUMPIFNEQ;
+    case EXIT;
     // TODO: a lot of missing opcodes
 }

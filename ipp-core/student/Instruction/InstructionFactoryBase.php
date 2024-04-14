@@ -75,6 +75,27 @@ abstract class InstructionFactoryBase
                 return OperationCodeEnum::IDIV;
                 break;
 
+            case "LABEL":
+                return OperationCodeEnum::LABEL;
+                break;
+
+            case "JUMP":
+                return OperationCodeEnum::JUMP;
+                break;
+
+            case "JUMPIFEQ":
+                return OperationCodeEnum::JUMPIFEQ;
+                break;
+
+            case "JUMPIFNEQ":
+                return OperationCodeEnum::JUMPIFNEQ;
+                break;
+
+            case "EXIT":
+                return OperationCodeEnum::EXIT;
+                break;
+
+
             // TODO: the rest of the cases
 
             default:
