@@ -75,11 +75,18 @@ class Visitor
                     break;
 
                 case ArgTypeEnum::bool:
-                    $value = (boolean) $argValue;
+                    if ($argValue == "true")
+                    {
+                        $value = true;
+                    }
+                    else
+                    {
+                        $value = false;
+                    }
                     break;
 
                 case ArgTypeEnum::nil:
-                    $value = "";
+                    $value = null;
                     break;
 
                 case ArgTypeEnum::label:
@@ -129,9 +136,9 @@ class Visitor
 
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
         // GetDeclaredVariable() exits if the given var isn't declared, otherwise a null check would be necessary here
+        
         $argType = $instruction->getArg2Type();
         $argValue = $instruction->getArg2Value();
-
         $value = $this->GetValueBasedOnType($argType, $argValue);
 
         // save value
