@@ -16,5 +16,7 @@ enum OperationCodeEnum
     case JUMPIFEQ;
     case JUMPIFNEQ;
     case EXIT;
+
+    case PLACEHOLDER;
     // TODO: a lot of missing opcodes
 }

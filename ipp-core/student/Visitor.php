@@ -12,6 +12,7 @@ use IPP\Student\Instruction\JumpInstruction;
 use IPP\Student\Instruction\LabelInstruction;
 use IPP\Student\Instruction\MoveInstruction;
 use IPP\Student\Instruction\OperationCodeEnum;
+use IPP\Student\Instruction\PlaceholderInstruction;
 use IPP\Student\Instruction\WriteInstruction;
 use IPP\Student\LinkedList\VarListNode;
 
@@ -254,6 +255,12 @@ class Visitor
     public function visitExitInstruction(ExitInstruction $instruction)
     {
         echo "Exit\n";
+    }
+
+    // PLACEHOLDER
+    public function visitPlaceholderInstruction(PlaceholderInstruction $instruction)
+    {
+        echo "Placeholder\n";
     }
 
     // ===========================================

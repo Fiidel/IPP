@@ -46,15 +46,12 @@ class InstructionParser
                     break;
                 
                 default:
-                    $factory = null;
+                    $factory = new PlaceholderInstructionFactory;
                     break;
             }
 
-            if ($factory != null)
-            {
-                // create instruction and insert into list
-                $instructionList->InsertLast($factory->CreateInstruction($instr));
-            }
+            // create instruction and insert into list
+            $instructionList->InsertLast($factory->CreateInstruction($instr));
         }
         return $instructionList;
     }
