@@ -30,9 +30,18 @@ class Interpreter extends AbstractInterpreter
         $visitor = new Visitor;
         while ($currentNode != null)
         {
-            $currentNode->instruction->accept($visitor);
-            $currentNode = $currentNode->nextInstruction;
+            // if $jump is returned true, the next node is the LABEL node that it's supposed to jump to
+            $jump = $currentNode->instruction->accept($visitor);
+            if ($jump)
+            {
+                $currentNode = $currentNode->labelNode;
+            }
+            else
+            {
+                $currentNode = $currentNode->nextInstruction;
+            }
         }
+
         $visitor->PrintGF();
 
         return 0;

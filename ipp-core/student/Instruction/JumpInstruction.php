@@ -23,8 +23,8 @@ class JumpInstruction extends InstructionBase
     }
 
     // VISITOR ACCEPT
-    public function accept(Visitor $visitor) : void
+    public function accept(Visitor $visitor) : bool
     {
-        $visitor->visitJumpInstruction($this);
+        return $visitor->visitJumpInstruction($this);
     }
 }

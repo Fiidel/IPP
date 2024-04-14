@@ -240,9 +240,10 @@ class Visitor
     }
 
     // JUMP
-    public function visitJumpInstruction(JumpInstruction $instruction)
+    public function visitJumpInstruction(JumpInstruction $instruction) : bool
     {
         echo "Jump\n";
+        return true;
     }
 
     // CONDITIONAL JUMP
