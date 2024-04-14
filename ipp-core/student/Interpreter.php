@@ -4,7 +4,6 @@ namespace IPP\Student;
 
 use IPP\Student\Instruction\InstructionParser;
 use IPP\Core\AbstractInterpreter;
-use IPP\Core\Exception\NotImplementedException;
 use IPP\Student\AST\ASTConverter;
 
 class Interpreter extends AbstractInterpreter
@@ -15,7 +14,6 @@ class Interpreter extends AbstractInterpreter
         // $val = $this->input->readString();
         // $this->stdout->writeString("stdout");
         // $this->stderr->writeString("stderr");
-        // throw new NotImplementedException;
 
         $dom = $this->source->getDOMDocument();
         $instructions = $dom->getElementsByTagName("instruction");
