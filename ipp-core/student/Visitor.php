@@ -540,6 +540,40 @@ class Visitor
     public function visitStringManipulationInstruction(StringManipulationInstruction $instruction)
     {
         echo "String manipulation\n";
+        
+        // TODO: check args are var or string
+        $argType1 = $instruction->getArg2Type();
+        $argValue1 = $instruction->getArg2Value();
+        $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
+
+        $argType2 = $instruction->getArg3Type();
+        $argValue2 = $instruction->getArg3Value();
+        $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
+
+        switch ($instruction->getOpcode())
+        {
+            case OperationCodeEnum::CONCAT:
+                $result = $value1 . $value2;
+                break;
+            
+            case OperationCodeEnum::GETCHAR:
+                // necessary to convert to ASCII, otherwise escape sequences will create an offset
+                $string = $this->Escape2ASCII($value1);
+                $index = $value2;
+                if (strlen($string) <= $value2)
+                break;
+
+            case OperationCodeEnum::SETCHAR:
+                // necessary to convert to ASCII, otherwise escape sequences will create an offset
+
+                break;
+
+            default:
+                break;
+        }
+
+        $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
+        $var->setValue($result);
     }
 
     // STRLEN
