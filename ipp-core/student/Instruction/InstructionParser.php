@@ -57,6 +57,13 @@ class InstructionParser
                     $factory = new RelationInstructionFactory;
                     break;
                 
+                case "CONCAT":
+                case "GETCHAR":
+                case "SETCHAR":
+                case "STRLEN":
+                    $factory = new StringInstructionFactory;
+                    break;
+
                 default:
                     $factory = new PlaceholderInstructionFactory;
                     break;

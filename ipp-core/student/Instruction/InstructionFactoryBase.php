@@ -119,6 +119,23 @@ abstract class InstructionFactoryBase
                 return OperationCodeEnum::EQ;
                 break;
 
+            case "CONCAT":
+                return OperationCodeEnum::CONCAT;
+                break;
+
+            case "GETCHAR":
+                return OperationCodeEnum::GETCHAR;
+                break;
+
+            case "SETCHAR":
+                return OperationCodeEnum::SETCHAR;
+                break;
+
+            case "STRLEN":
+                return OperationCodeEnum::STRLEN;
+                break;
+
+
 
             // TODO: the rest of the cases
 

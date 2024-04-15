@@ -18,6 +18,8 @@ use IPP\Student\Instruction\OperationCodeEnum;
 use IPP\Student\Instruction\OrInstruction;
 use IPP\Student\Instruction\PlaceholderInstruction;
 use IPP\Student\Instruction\RelationInstruction;
+use IPP\Student\Instruction\StringManipulationInstruction;
+use IPP\Student\Instruction\StrlenInstruction;
 use IPP\Student\Instruction\WriteInstruction;
 use IPP\Student\LinkedList\VarListNode;
 
@@ -528,6 +530,18 @@ class Visitor
         {
             return $this->EvaluateAnyRelation($value1, $value2, $type);
         }
+    }
+
+    // STRING MANIPULATION
+    public function visitStringManipulationInstruction(StringManipulationInstruction $instruction)
+    {
+        echo "String manipulation\n";
+    }
+
+    // STRLEN
+    public function visitStrlenInstruction(StrlenInstruction $instruction)
+    {
+        echo "Strlen\n";
     }
 
     // PLACEHOLDER
