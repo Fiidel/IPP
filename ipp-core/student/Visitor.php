@@ -11,6 +11,7 @@ use IPP\Student\Instruction\ConditionalJumpInstruction;
 use IPP\Student\LinkedList\VarLinkedList;
 use IPP\Student\Instruction\DefvarInstruction;
 use IPP\Student\Instruction\ExitInstruction;
+use IPP\Student\Instruction\Int2CharInstruction;
 use IPP\Student\Instruction\JumpInstruction;
 use IPP\Student\Instruction\LabelInstruction;
 use IPP\Student\Instruction\MoveInstruction;
@@ -719,6 +720,15 @@ class Visitor
         $var->setValue($result);
     }
 
+    // INT2CHAR
+    public function visitInt2CharInstruction(Int2CharInstruction $instruction)
+    {
+        echo "Int2Char\n";
+
+        // TODO: check it's int
+        // convert
+    }
+    
     // PLACEHOLDER
     public function visitPlaceholderInstruction(PlaceholderInstruction $instruction)
     {

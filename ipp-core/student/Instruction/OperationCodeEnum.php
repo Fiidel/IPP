@@ -28,6 +28,7 @@ enum OperationCodeEnum
     case STRLEN;
     case TYPE;
     case READ;
+    CASE INT2CHAR;
 
     case PLACEHOLDER;
     // TODO: a lot of missing opcodes
