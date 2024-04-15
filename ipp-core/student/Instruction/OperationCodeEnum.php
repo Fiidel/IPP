@@ -26,6 +26,7 @@ enum OperationCodeEnum
     case GETCHAR;
     case SETCHAR;
     case STRLEN;
+    case TYPE;
 
     case PLACEHOLDER;
     // TODO: a lot of missing opcodes

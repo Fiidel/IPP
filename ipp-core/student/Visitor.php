@@ -20,6 +20,7 @@ use IPP\Student\Instruction\PlaceholderInstruction;
 use IPP\Student\Instruction\RelationInstruction;
 use IPP\Student\Instruction\StringManipulationInstruction;
 use IPP\Student\Instruction\StrlenInstruction;
+use IPP\Student\Instruction\TypeInstruction;
 use IPP\Student\Instruction\WriteInstruction;
 use IPP\Student\LinkedList\VarListNode;
 
@@ -614,6 +615,12 @@ class Visitor
         $string = $this->Escape2ASCII($value);
 
         $var->setValue(mb_strlen($string));
+    }
+
+    // TYPE
+    public function visitTypeInstruction(TypeInstruction $instruction)
+    {
+        echo "Type\n";
     }
 
     // PLACEHOLDER

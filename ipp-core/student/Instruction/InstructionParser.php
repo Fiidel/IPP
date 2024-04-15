@@ -64,6 +64,10 @@ class InstructionParser
                     $factory = new StringInstructionFactory;
                     break;
 
+                case "TYPE":
+                    $factory = new TypeInstructionFactory;
+                    break;
+
                 default:
                     $factory = new PlaceholderInstructionFactory;
                     break;

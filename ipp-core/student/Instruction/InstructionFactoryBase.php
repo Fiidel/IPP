@@ -135,6 +135,9 @@ abstract class InstructionFactoryBase
                 return OperationCodeEnum::STRLEN;
                 break;
 
+            case "TYPE":
+                return OperationCodeEnum::TYPE;
+                break;
 
 
             // TODO: the rest of the cases
