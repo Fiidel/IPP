@@ -76,6 +76,10 @@ class InstructionParser
                     $factory = new Int2CharInstructionFactory;
                     break;
 
+                case "STR2INT":
+                    $factory = new Str2IntInstructionFactory;
+                    break;
+
                 default:
                     $factory = new PlaceholderInstructionFactory;
                     break;

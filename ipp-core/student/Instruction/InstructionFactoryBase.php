@@ -147,6 +147,10 @@ abstract class InstructionFactoryBase
                 return OperationCodeEnum::INT2CHAR;
                 break;
 
+            case "STR2INT":
+                return OperationCodeEnum::STR2INT;
+                break;
+
 
             // TODO: the rest of the cases
 

@@ -21,6 +21,7 @@ use IPP\Student\Instruction\OrInstruction;
 use IPP\Student\Instruction\PlaceholderInstruction;
 use IPP\Student\Instruction\ReadInstruction;
 use IPP\Student\Instruction\RelationInstruction;
+use IPP\Student\Instruction\Str2IntInstruction;
 use IPP\Student\Instruction\StringManipulationInstruction;
 use IPP\Student\Instruction\StrlenInstruction;
 use IPP\Student\Instruction\TypeInstruction;
@@ -726,7 +727,16 @@ class Visitor
         echo "Int2Char\n";
 
         // TODO: check it's int
-        // convert
+        // convert and save
+    }
+
+    // STR2INT
+    public function visitStr2IntInstruction(Str2IntInstruction $instruction)
+    {
+        echo "Str2Int\n";
+
+        // TODO: check it's string
+        // get char from position, convert and save
     }
     
     // PLACEHOLDER
