@@ -240,7 +240,6 @@ class Visitor
         }
         else if ($valueType == "string")
         {
-            echo "trying to convert\n";
             // detect and extract unicode
             preg_match_all("/\\\\([0-9]{3})/", $value, $matches);
 
