@@ -115,6 +115,21 @@ class Visitor
         return $value;
     }
 
+    private function Escape2ASCII(string $value)
+    {
+        // detect and extract unicode
+        preg_match_all("/\\\\([0-9]{3})/", $value, $matches);
+
+        foreach ($matches[0] as $match)
+        {
+            // get ASCII of extracted unicode
+            $ascii = chr((int) (substr($match, 1)));
+
+            // replace detected unicode with ASCII character
+            $value = str_replace($match, $ascii, $value);
+        }
+    }
+
     // ===========================================
     // INSTRUCTION EXECUTION
     // ===========================================
@@ -240,17 +255,7 @@ class Visitor
         }
         else if ($valueType == "string")
         {
-            // detect and extract unicode
-            preg_match_all("/\\\\([0-9]{3})/", $value, $matches);
-
-            foreach ($matches[0] as $match)
-            {
-                // get ASCII of extracted unicode
-                $ascii = chr((int) (substr($match, 1)));
-
-                // replace detected unicode with ASCII character
-                $value = str_replace($match, $ascii, $value);
-            }
+            $this->Escape2ASCII($value);
         }
         
         $this->stdout->writeString($value);
