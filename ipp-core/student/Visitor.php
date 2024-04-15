@@ -2,6 +2,7 @@
 
 namespace IPP\Student;
 
+use IPP\Core\Interface\InputReader;
 use IPP\Core\Interface\OutputWriter;
 use IPP\Student\Instruction\AndInstruction;
 use IPP\Student\Instruction\ArgTypeEnum;
@@ -28,11 +29,13 @@ use IPP\Student\LinkedList\VarListNode;
 class Visitor
 {
     private OutputWriter $stdout;
+    private InputReader $input;
     private VarLinkedList $globalFrame;
 
-    public function __construct(OutputWriter $stdout)
+    public function __construct(OutputWriter $stdout, InputReader $input)
     {
         $this->stdout = $stdout;
+        $this->input = $input;
         $this->globalFrame = new VarLinkedList;
     }
 
@@ -684,6 +687,36 @@ class Visitor
     public function visitReadInstruction(ReadInstruction $instruction)
     {
         echo "Read\n";
+
+        $argType = $instruction->getArg2Type();
+        $argValue = $instruction->getArg2Value();
+        $readType = $this->GetValueBasedOnType($argType, $argValue);
+
+        $readValue = $this->input->readString();
+
+        if ($readValue == null)
+        {
+            $result = null;
+        }
+        else if ($readType == "int")
+        {
+            $result = (int) $readValue;
+        }
+        else if ($readType == "bool")
+        {
+            $result = (boolean) $readValue;
+        }
+        else if ($readType == "string")
+        {
+            $result = (string) $readValue;
+        }
+        else
+        {
+            $result = null;
+        }
+
+        $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
+        $var->setValue($result);
     }
 
     // PLACEHOLDER
