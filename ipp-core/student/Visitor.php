@@ -602,6 +602,18 @@ class Visitor
     public function visitStrlenInstruction(StrlenInstruction $instruction)
     {
         echo "Strlen\n";
+
+        // TODO: check arg is string
+        $argType = $instruction->getArg2Type();
+        $argValue = $instruction->getArg2Value();
+        $value = $this->GetValueBasedOnType($argType, $argValue);
+
+        $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
+
+        // necessary to convert to ASCII, otherwise escape sequences will create an offset
+        $string = $this->Escape2ASCII($value);
+
+        $var->setValue(mb_strlen($string));
     }
 
     // PLACEHOLDER
