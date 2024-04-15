@@ -621,6 +621,62 @@ class Visitor
     public function visitTypeInstruction(TypeInstruction $instruction)
     {
         echo "Type\n";
+
+        $argType = $instruction->getArg2Type();
+        $argValue = $instruction->getArg2Value();
+
+        switch ($argType)
+        {
+            case ArgTypeEnum::int:
+                $result = "int";
+                break;
+
+            case ArgTypeEnum::bool:
+                $result = "bool";
+                break;
+
+            case ArgTypeEnum::string:
+                $result = "string";
+                break;
+
+            case ArgTypeEnum::nil:
+                $result = "nil";
+                break;
+
+            case ArgTypeEnum::var:
+                $value = $this->GetValueBasedOnType($argType, $argValue);
+                if ($value == null)
+                {
+                    $result = "";
+                }
+                else
+                {
+                    switch (gettype($value))
+                    {
+                        case "integer":
+                            $result = "int";
+                            break;
+                        
+                        case "boolean":
+                            $result = "bool";
+                            break;
+
+                        case "string":
+                            $result = "string";
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                break;
+            
+            default:
+                break;
+        }
+
+        $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
+        $var->setValue($result);
     }
 
     // PLACEHOLDER
