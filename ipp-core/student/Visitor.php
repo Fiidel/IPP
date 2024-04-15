@@ -412,6 +412,122 @@ class Visitor
     public function visitRelationInstruction(RelationInstruction $instruction)
     {
         echo "Relation\n";
+
+        $argType1 = $instruction->getArg2Type();
+        $argValue1 = $instruction->getArg2Value();
+        $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
+
+        $argType2 = $instruction->getArg3Type();
+        $argValue2 = $instruction->getArg3Value();
+        $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
+
+        $opcode = $instruction->getOpcode();
+
+        switch ($opcode)
+        {
+            case OperationCodeEnum::LT:
+                $result = $this->EvaluateAnyRelation($value1, $value2, $opcode);
+                break;
+            
+            case OperationCodeEnum::GT:
+                $result = $this->EvaluateAnyRelation($value1, $value2, $opcode);
+                break;
+
+            case OperationCodeEnum::EQ:
+                $result = $this->EvaluateEqRelation($value1, $value2, $opcode);
+                break;
+
+            default:
+                break;
+        }
+
+        $var = $this->GetDeclaredVariable($instruction->getArg1Value());
+        $var->setValue($result);
+    }
+
+    private function EvaluateAnyRelation($value1, $value2, OperationCodeEnum $type) : bool
+    {
+        if (gettype($value1) == "integer" && gettype($value2) == "integer")
+        {
+            if ($type == OperationCodeEnum::LT)
+            {
+                return ($value1 < $value2);
+            }
+            else if ($type == OperationCodeEnum::GT)
+            {
+                return ($value1 > $value2);
+            }
+            else if ($type == OperationCodeEnum::EQ)
+            {
+                return ($value1 == $value2);
+            }
+        }
+        else if (gettype($value1) == "boolean" && gettype($value2) == "boolean")
+        {
+            if ($type == OperationCodeEnum::LT)
+            {
+                if ($value1 == false && $value2 == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if ($type == OperationCodeEnum::GT)
+            {
+                if ($value1 == true && $value2 == false)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if ($type == OperationCodeEnum::EQ)
+            {
+                return ($value1 == $value2);
+            }
+        }
+        else if (gettype($value1) == "string" && gettype($value2) == "string")
+        {
+            $strcmpValue = strcmp($value1, $value2);
+            if ($type == OperationCodeEnum::LT)
+            {
+                return ($strcmpValue < 0);
+            }
+            else if ($type == OperationCodeEnum::GT)
+            {
+                return ($strcmpValue > 0);
+            }
+            else if ($type == OperationCodeEnum::EQ)
+            {
+                return ($strcmpValue == 0);
+            }
+        }
+        else
+        {
+            // TODO: error message?
+            exit(53);
+        }
+    }
+
+    private function EvaluateEqRelation($value1, $value2, OperationCodeEnum $type) : bool
+    {
+        if (gettype($value1) == "NULL") 
+        {
+            return ($value2 == null);
+        }
+        else if (gettype($value2) == "NULL")
+        {
+            return ($value1 == null);
+        }
+        else
+        {
+            return $this->EvaluateAnyRelation($value1, $value2, $type);
+        }
     }
 
     // PLACEHOLDER
