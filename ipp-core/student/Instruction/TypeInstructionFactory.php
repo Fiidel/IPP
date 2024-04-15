@@ -6,7 +6,7 @@ use DOMNode;
 
 class TypeInstructionFactory extends InstructionFactoryBase
 {
-    public function CreateInstruction(DOMNode $XmlNode) : InstructionBase
+    public function CreateInstruction(DOMNode $XmlNode) : TypeInstruction
     {
         $order = parent::GetInstructionOrder($XmlNode);
 
