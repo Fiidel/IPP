@@ -552,6 +552,8 @@ class Visitor
         $argValue2 = $instruction->getArg3Value();
         $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
 
+        $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
+
         switch ($instruction->getOpcode())
         {
             case OperationCodeEnum::CONCAT:
@@ -562,7 +564,7 @@ class Visitor
                 // necessary to convert to ASCII, otherwise escape sequences will create an offset
                 $string = $this->Escape2ASCII($value1);
                 $index = $value2;
-                if (strlen($string) <= $value2)
+                if (strlen($string) <= $index)
                 {
                     // TODO: error message? index out of range
                     exit(58);
@@ -575,14 +577,24 @@ class Visitor
 
             case OperationCodeEnum::SETCHAR:
                 // necessary to convert to ASCII, otherwise escape sequences will create an offset
-
+                $string = $this->Escape2ASCII((string) $var->getValue());
+                $index = $value1;
+                if (strlen($string) <= $index)
+                {
+                    // TODO: error message? index out of range
+                    exit(58);
+                }
+                else
+                {
+                    $string[$index] = $value2[0];
+                    $result = $string;
+                }
                 break;
 
             default:
                 break;
         }
 
-        $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
         $var->setValue($result);
     }
 
