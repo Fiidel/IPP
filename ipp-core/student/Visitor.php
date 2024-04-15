@@ -734,7 +734,20 @@ class Visitor
         echo "Int2Char\n";
 
         // TODO: check it's int
+
         // convert and save
+        $argType = $instruction->getArg2Type();
+        $argValue = $instruction->getArg2Value();
+        $intValue = $this->GetValueBasedOnType($argType, $argValue);
+
+        $char = mb_chr($intValue, "UTF-8");
+        if ($char == false)
+        {
+            exit(58);
+        }
+
+        $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
+        $var->setValue($char);
     }
 
     // STR2INT
@@ -743,6 +756,7 @@ class Visitor
         echo "Str2Int\n";
 
         // TODO: check it's string
+        
         // get char from position, convert and save
     }
     
