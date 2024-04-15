@@ -563,6 +563,14 @@ class Visitor
                 $string = $this->Escape2ASCII($value1);
                 $index = $value2;
                 if (strlen($string) <= $value2)
+                {
+                    // TODO: error message? index out of range
+                    exit(58);
+                }
+                else
+                {
+                    $result = $string[$index];
+                }
                 break;
 
             case OperationCodeEnum::SETCHAR:
