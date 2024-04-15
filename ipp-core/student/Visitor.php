@@ -571,14 +571,15 @@ class Visitor
                 // necessary to convert to ASCII, otherwise escape sequences will create an offset
                 $string = $this->Escape2ASCII($value1);
                 $index = $value2;
-                if (strlen($string) <= $index)
+                if (mb_strlen($string, "UTF-8") <= $index)
                 {
                     // TODO: error message? index out of range
                     exit(58);
                 }
                 else
                 {
-                    $result = $string[$index];
+                    // need to use mb_substr, otherwise there's an offset
+                    $result = mb_substr($string, $index, 1, "UTF-8");
                 }
                 break;
 
@@ -586,15 +587,21 @@ class Visitor
                 // necessary to convert to ASCII, otherwise escape sequences will create an offset
                 $string = $this->Escape2ASCII((string) $var->getValue());
                 $index = $value1;
-                if (strlen($string) <= $index)
+                if (mb_strlen($string, "UTF-8") <= $index)
                 {
                     // TODO: error message? index out of range
                     exit(58);
                 }
                 else
                 {
-                    $string[$index] = $value2[0];
-                    $result = $string;
+                    $charToReplaceWith = mb_substr($value2, 0, 1, "UTF-8");
+
+                    // a little magic to account for special UTF-8 char offsets
+                    // the string is parsed into sections delimited by the index characters and then concatenated with the correct char
+                    $startOfString = mb_substr($string, 0, $index, "UTF-8"); // length is set to $index -> takes substr up until the wanted position
+                    $endOfString = mb_substr($string, $index+1, null, "UTF-8"); // starts at $index+1 -> takes substr from after the wanted position until the end
+
+                    $result = $startOfString . $charToReplaceWith . $endOfString;
                 }
                 break;
 
@@ -620,7 +627,7 @@ class Visitor
         // necessary to convert to ASCII, otherwise escape sequences will create an offset
         $string = $this->Escape2ASCII($value);
 
-        $var->setValue(mb_strlen($string));
+        $var->setValue(mb_strlen($string, "UTF-8"));
     }
 
     // TYPE
