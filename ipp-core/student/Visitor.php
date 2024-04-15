@@ -17,6 +17,7 @@ use IPP\Student\Instruction\NotInstruction;
 use IPP\Student\Instruction\OperationCodeEnum;
 use IPP\Student\Instruction\OrInstruction;
 use IPP\Student\Instruction\PlaceholderInstruction;
+use IPP\Student\Instruction\ReadInstruction;
 use IPP\Student\Instruction\RelationInstruction;
 use IPP\Student\Instruction\StringManipulationInstruction;
 use IPP\Student\Instruction\StrlenInstruction;
@@ -677,6 +678,12 @@ class Visitor
 
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
         $var->setValue($result);
+    }
+
+    // READ
+    public function visitReadInstruction(ReadInstruction $instruction)
+    {
+        echo "Read\n";
     }
 
     // PLACEHOLDER

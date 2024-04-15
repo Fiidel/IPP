@@ -68,6 +68,10 @@ class InstructionParser
                     $factory = new TypeInstructionFactory;
                     break;
 
+                case "READ":
+                    $factory = new ReadInstructionFactory;
+                    break;
+
                 default:
                     $factory = new PlaceholderInstructionFactory;
                     break;

@@ -139,6 +139,10 @@ abstract class InstructionFactoryBase
                 return OperationCodeEnum::TYPE;
                 break;
 
+            case "READ":
+                return OperationCodeEnum::READ;
+                break;
+
 
             // TODO: the rest of the cases
 
