@@ -2,6 +2,7 @@
 
 namespace IPP\Student\AST;
 
+use Exception;
 use IPP\Student\Instruction\ConditionalJumpInstruction;
 use IPP\Student\Instruction\JumpInstruction;
 use IPP\Student\Instruction\LabelInstruction;
@@ -12,9 +13,11 @@ class ASTConverter
 {
     public function ParseInstructions2AST(InstructionLinkedList $instructionList) : AST
     {
+        // note: this method presumes that the order of instructions in the input XML is correct
+        // (starting at 1 and with no order number left out)
+        // the last parsed instruction is the one with the last correct sequential order
+        
         $AST = new AST;
-
-        // TODO: missing order number? (this method presumes that once it gets null, that's where the program ends)
 
         // first pass
         $order = 1;
@@ -38,8 +41,7 @@ class ASTConverter
                 // error checking: trying to define a label of the same identifier more than once
                 if (array_key_exists($labelName, $labels))
                 {
-                    // TODO: error message?
-                    exit(52);
+                    throw new Exception("Redefinition of label.", 52);
                 }
 
                 $labels[$labelName] = $node;

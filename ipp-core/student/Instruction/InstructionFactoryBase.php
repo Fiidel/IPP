@@ -42,8 +42,7 @@ abstract class InstructionFactoryBase
                 break;
             
             default:
-                // TODO: error message?
-                exit(52);
+                throw new Exception("Unrecognized arg type $argType.", 52);
                 break;
         }
     }
