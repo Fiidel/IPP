@@ -249,11 +249,20 @@ class Visitor
 
     private function AssertSameTypeOrNil(ArgTypeEnum $argType1, $argValue1, ArgTypeEnum $argType2, $argValue2)
     {
-        if (($argType1 == $argType2)
-            || ($argType1 == ArgTypeEnum::nil)
-            || ($argType2 == ArgTypeEnum::nil)
-            || ($argValue1 == null)
-            || ($argValue2 == null))
+        if ($argType1 == ArgTypeEnum::var)
+        {
+            $varType1 = gettype($argValue1);
+        }
+        if ($argType2 == ArgTypeEnum::var)
+        {
+            $varType2 = gettype($argValue2);
+        }
+
+        if ((($argType1 == ArgTypeEnum::int || $varType1 == "integer") && ($argType2 == ArgTypeEnum::int || $varType2 == "integer"))
+            || (($argType1 == ArgTypeEnum::string || $varType1 == "string") && ($argType2 == ArgTypeEnum::string || $varType2 == "string"))
+            || (($argType1 == ArgTypeEnum::bool || $varType1 == "boolean") && ($argType2 == ArgTypeEnum::bool || $varType2 == "boolean"))
+            || ($argType1 == ArgTypeEnum::nil) || ($argType2 == ArgTypeEnum::nil)
+            || ($argValue1 == null) || ($argValue2 == null))
         {
             return true;
         }
