@@ -3,6 +3,7 @@
 namespace IPP\Student\Instruction;
 
 use DOMNode;
+use Exception;
 
 abstract class InstructionFactoryBase
 {
@@ -164,6 +165,7 @@ abstract class InstructionFactoryBase
                 break;
 
             default:
+                throw new Exception("Unrecognized opcode $opcodeType.", 52);
                 break;
         }
     }
