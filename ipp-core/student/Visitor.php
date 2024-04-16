@@ -2,6 +2,7 @@
 
 namespace IPP\Student;
 
+use Exception;
 use IPP\Core\Interface\InputReader;
 use IPP\Core\Interface\OutputWriter;
 use IPP\Student\Instruction\AndInstruction;
@@ -64,7 +65,7 @@ class Visitor
             // check TF exists
             if ($this->temporaryFrame == null)
             {
-                exit(55);
+                throw new Exception("TF doesn't exist.", 55);
             }
 
             return $this->RetrieveVarFromFrame($identifier, $this->temporaryFrame, $frame);
@@ -77,7 +78,7 @@ class Visitor
             // check LF exists
             if ($localFrame == false)
             {
-                exit(55);
+                throw new Exception("LF doesn't exist.", 55);
             }
 
             return $this->RetrieveVarFromFrame($identifier, $localFrame, $frame);
@@ -93,9 +94,7 @@ class Visitor
         $var = $frameList->GetVarWithIdentifier($identifier);
         if ($var == null)
         {
-            // TODO: remove echo (or print it to stderr, idk)
-            echo "var $identifier not declared in $frameName\n";
-            exit(54);
+            throw new Exception("Variable $identifier is not declared in $frameName.", 54);
         }
         else
         {
@@ -180,9 +179,7 @@ class Visitor
         }
         else
         {
-            // TODO: remove echo (or print it to stderr, idk)
-            echo "var $identifier already declared in $frameName\n";
-            exit(52);
+            throw new Exception("Variable $identifier is already declared in $frameName.", 52);
         }
     }
 
@@ -207,7 +204,7 @@ class Visitor
             // check TF exists
             if ($this->temporaryFrame == null)
             {
-                exit(55);
+                throw new Exception("TF doesn't exist.", 55);
             }
 
             $this->DeclareVariable($identifier, $this->temporaryFrame, $frame);
@@ -220,7 +217,7 @@ class Visitor
             // check LF exists
             if ($localFrame == false)
             {
-                exit(55);
+                throw new Exception("LF doesn't exist.", 55);
             }
 
             $this->DeclareVariable($identifier, $localFrame, $frame);
@@ -281,7 +278,7 @@ class Visitor
                 echo "of type IDIV\n";
                 if ($value2 == 0)
                 {
-                    exit(57);
+                    throw new Exception("Division by 0.", 57);
                 }
                 else
                 {
@@ -405,7 +402,7 @@ class Visitor
         }
         else
         {
-            exit(57);
+            throw new Exception("Exit code of EXIT must be between 0 and 9 (included).", 57);
         }
     }
 
@@ -584,8 +581,7 @@ class Visitor
         }
         else
         {
-            // TODO: error message?
-            exit(53);
+            throw new Exception("Incompatible types for a relation instruction.", 53);
         }
     }
 
@@ -633,8 +629,7 @@ class Visitor
                 $index = $value2;
                 if (mb_strlen($string, "UTF-8") <= $index)
                 {
-                    // TODO: error message? index out of range
-                    exit(58);
+                    throw new Exception("String index out of range.", 58);
                 }
                 else
                 {
@@ -649,8 +644,7 @@ class Visitor
                 $index = $value1;
                 if (mb_strlen($string, "UTF-8") <= $index)
                 {
-                    // TODO: error message? index out of range
-                    exit(58);
+                    throw new Exception("String index out of range.", 58);
                 }
                 else
                 {
@@ -802,7 +796,7 @@ class Visitor
         $char = mb_chr($intValue, "UTF-8");
         if ($char == false)
         {
-            exit(58);
+            throw new Exception("INT2CHAR failed. Invalid integer value.", 58);
         }
 
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
@@ -830,15 +824,14 @@ class Visitor
         $index = $value2;
         if (mb_strlen($string, "UTF-8") <= $index)
         {
-            // TODO: error message? index out of range
-            exit(58);
+            throw new Exception("String index out of range.", 58);
         }
 
         $char = mb_substr($string, $index, 1, "UTF-8");
         $unicode = mb_ord($char, "UTF-8");
         if ($unicode == false)
         {
-            exit(58);
+            throw new Exception("STR2INT failed. Char conversion failure.", 58);
         }
 
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
@@ -864,7 +857,7 @@ class Visitor
                 // error checking: no TF defined
                 if ($this->temporaryFrame == null)
                 {
-                    exit(55);
+                    throw new Exception("PUSHFRAME failed. No TF defined.", 55);
                 }
 
                 array_push($this->localFrames, $this->temporaryFrame);
@@ -877,7 +870,7 @@ class Visitor
                 // error checking: no LF available
                 if (end($this->localFrames) == false)
                 {
-                    exit(55);
+                    throw new Exception("POPFRAME failed. No LF available.", 55);
                 }
 
                 array_pop($this->localFrames);
