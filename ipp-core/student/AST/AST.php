@@ -6,7 +6,7 @@ use IPP\Student\Instruction\InstructionBase;
 
 class AST
 {
-    private $head;
+    private ?ASTNode $head;
     public function GetHead() : ?ASTNode
     {
         return $this->head;
