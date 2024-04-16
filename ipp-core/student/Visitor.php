@@ -894,7 +894,7 @@ class Visitor
         $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
 
         // error checking - first operand must be string, second int
-        $this->AssertStringOrStringVar($argType1, $value2);
+        $this->AssertStringOrStringVar($argType1, $value1);
         $this->AssertIntOrIntVar($argType2, $value2);
 
         // necessary to convert to ASCII, otherwise escape sequences will create an offset
