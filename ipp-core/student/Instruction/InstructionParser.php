@@ -80,6 +80,12 @@ class InstructionParser
                     $factory = new Str2IntInstructionFactory;
                     break;
 
+                case "CREATEFRAME":
+                case "PUSHFRAME":
+                case "POPFRAME":
+                    $factory = new FrameInstructionFactory;
+                    break;
+
                 default:
                     $factory = new PlaceholderInstructionFactory;
                     break;

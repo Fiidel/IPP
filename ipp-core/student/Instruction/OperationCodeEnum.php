@@ -30,6 +30,9 @@ enum OperationCodeEnum
     case READ;
     CASE INT2CHAR;
     case STR2INT;
+    case CREATEFRAME;
+    case PUSHFRAME;
+    case POPFRAME;
 
     case PLACEHOLDER;
     // TODO: a lot of missing opcodes

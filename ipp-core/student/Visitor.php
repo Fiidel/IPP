@@ -11,6 +11,7 @@ use IPP\Student\Instruction\ConditionalJumpInstruction;
 use IPP\Student\LinkedList\VarLinkedList;
 use IPP\Student\Instruction\DefvarInstruction;
 use IPP\Student\Instruction\ExitInstruction;
+use IPP\Student\Instruction\FrameInstruction;
 use IPP\Student\Instruction\Int2CharInstruction;
 use IPP\Student\Instruction\JumpInstruction;
 use IPP\Student\Instruction\LabelInstruction;
@@ -783,6 +784,30 @@ class Visitor
 
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
         $var->setValue($unicode);
+    }
+
+    // FRAME
+    public function visitFrameInstruction(FrameInstruction $instruction)
+    {
+        echo "Frame ";
+
+        switch ($instruction->getOpcode())
+        {
+            case OperationCodeEnum::CREATEFRAME:
+                echo "of type CREATEFRAME\n";
+                break;
+
+            case OperationCodeEnum::PUSHFRAME:
+                echo "of type PUSHFRAME\n";
+                break;
+
+            case OperationCodeEnum::POPFRAME:
+                echo "of type POPFRAME\n";
+                break;
+            
+            default:
+                break;
+        }
     }
     
     // PLACEHOLDER

@@ -151,6 +151,18 @@ abstract class InstructionFactoryBase
                 return OperationCodeEnum::STR2INT;
                 break;
 
+            case "CREATEFRAME":
+                return OperationCodeEnum::CREATEFRAME;
+                break;
+
+            case "PUSHFRAME":
+                return OperationCodeEnum::PUSHFRAME;
+                break;
+
+            case "POPFRAME":
+                return OperationCodeEnum::POPFRAME;
+                break;
+
 
             // TODO: the rest of the cases
 
