@@ -735,7 +735,6 @@ class Visitor
 
         // TODO: check it's int
 
-        // convert and save
         $argType = $instruction->getArg2Type();
         $argValue = $instruction->getArg2Value();
         $intValue = $this->GetValueBasedOnType($argType, $argValue);
@@ -755,9 +754,35 @@ class Visitor
     {
         echo "Str2Int\n";
 
-        // TODO: check it's string
+        // TODO: check it's string and check arg types
         
         // get char from position, convert and save
+        $argType1 = $instruction->getArg2Type();
+        $argValue1 = $instruction->getArg2Value();
+        $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
+
+        $argType2 = $instruction->getArg3Type();
+        $argValue2 = $instruction->getArg3Value();
+        $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
+
+        // necessary to convert to ASCII, otherwise escape sequences will create an offset
+        $string = $this->Escape2ASCII($value1);
+        $index = $value2;
+        if (mb_strlen($string, "UTF-8") <= $index)
+        {
+            // TODO: error message? index out of range
+            exit(58);
+        }
+
+        $char = mb_substr($string, $index, 1, "UTF-8");
+        $unicode = mb_ord($char, "UTF-8");
+        if ($unicode == false)
+        {
+            exit(58);
+        }
+
+        $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
+        $var->setValue($unicode);
     }
     
     // PLACEHOLDER
