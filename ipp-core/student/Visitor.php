@@ -34,12 +34,16 @@ class Visitor
     private OutputWriter $stdout;
     private InputReader $input;
     private VarLinkedList $globalFrame;
+    private ?VarLinkedList $temporaryFrame;
+    private array $localFrames;
 
     public function __construct(OutputWriter $stdout, InputReader $input)
     {
         $this->stdout = $stdout;
         $this->input = $input;
         $this->globalFrame = new VarLinkedList;
+        $this->temporaryFrame = null;
+        $this->localFrames = [];
     }
 
     // ===========================================
@@ -795,14 +799,33 @@ class Visitor
         {
             case OperationCodeEnum::CREATEFRAME:
                 echo "of type CREATEFRAME\n";
+
+                $this->temporaryFrame = new VarLinkedList;
                 break;
 
             case OperationCodeEnum::PUSHFRAME:
                 echo "of type PUSHFRAME\n";
+
+                // error checking: no TF defined
+                if ($this->temporaryFrame == null)
+                {
+                    exit(55);
+                }
+
+                array_push($this->localFrames, $this->temporaryFrame);
+                $this->temporaryFrame = null;
                 break;
 
             case OperationCodeEnum::POPFRAME:
                 echo "of type POPFRAME\n";
+
+                // error checking: no LF available
+                if (end($this->localFrames) == false)
+                {
+                    exit(55);
+                }
+
+                array_pop($this->localFrames);
                 break;
             
             default:
