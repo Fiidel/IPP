@@ -190,8 +190,6 @@ class Visitor
     // DEFVAR
     public function visitDefvarInstruction(DefvarInstruction $instruction)
     {
-        echo "Defvar\n";
-
         $frame = preg_filter("/@(.*)$/", "", $instruction->GetArg1Value());
         $identifier = preg_filter("/^(.*)@/", "", $instruction->GetArg1Value());
         
@@ -227,8 +225,6 @@ class Visitor
     // MOVE
     public function visitMoveInstruction(MoveInstruction $instruction)
     {
-        echo "Move\n";
-
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
         // GetDeclaredVariable() exits if the given var isn't declared, otherwise a null check would be necessary here
         
@@ -242,9 +238,7 @@ class Visitor
 
     // ADD
     public function visitArithmeticInstruction(ArithmeticInstruction $instruction)
-    {
-        echo "Arithmetic ";
-        
+    {        
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
         // GetDeclaredVariable() exits if the given var isn't declared, otherwise a null check would be necessary here
         
@@ -260,22 +254,18 @@ class Visitor
         switch ($instruction->getOpcode())
         {
             case OperationCodeEnum::ADD:
-                echo "of type ADD\n";
                 $result = $value1 + $value2;
                 break;
             
             case OperationCodeEnum::SUB:
-                echo "of type SUB\n";
                 $result = $value1 - $value2;
                 break;
 
             case OperationCodeEnum::MUL:
-                echo "of type MUL\n";
                 $result = $value1 * $value2;
                 break;
 
             case OperationCodeEnum::IDIV:
-                echo "of type IDIV\n";
                 if ($value2 == 0)
                 {
                     throw new Exception("Division by 0.", 57);
@@ -296,8 +286,6 @@ class Visitor
     // WRITE
     public function visitWriteInstruction(WriteInstruction $instruction)
     {
-        echo "Write\n";
-
         $argType = $instruction->getArg1Type();
         $argValue = $instruction->getArg1Value();
         $value = $this->GetValueBasedOnType($argType, $argValue);
@@ -330,21 +318,17 @@ class Visitor
     // LABEL
     public function visitLabelInstruction(LabelInstruction $instruction)
     {
-        echo "Label\n";
     }
 
     // JUMP
     public function visitJumpInstruction(JumpInstruction $instruction) : bool
     {
-        echo "Jump\n";
         return true;
     }
 
     // CONDITIONAL JUMP
     public function visitConditionalJumpInstruction(ConditionalJumpInstruction $instruction) : bool
     {
-        echo "Conditional Jump\n";
-
         // TODO: check args are of the same type or nil
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
@@ -389,8 +373,6 @@ class Visitor
     // EXIT
     public function visitExitInstruction(ExitInstruction $instruction)
     {
-        echo "Exit\n";
-
         $argType = $instruction->getArg1Type();
         $argValue = $instruction->getArg1Value();
         $exitCode = $this->GetValueBasedOnType($argType, $argValue);
@@ -409,8 +391,6 @@ class Visitor
     // AND
     public function visitAndInstruction(AndInstruction $instruction)
     {
-        echo "And\n";
-
         // TODO: check args types
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
@@ -435,8 +415,6 @@ class Visitor
     // OR
     public function visitOrInstruction(OrInstruction $instruction)
     {
-        echo "Or\n";
-
         // TODO: check args types
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
@@ -461,8 +439,6 @@ class Visitor
     // NOT
     public function visitNotInstruction(NotInstruction $instruction)
     {
-        echo "Not\n";
-
         // TODO: check args type
         $argType = $instruction->getArg2Type();
         $argValue = $instruction->getArg2Value();
@@ -483,8 +459,6 @@ class Visitor
     // RELATION
     public function visitRelationInstruction(RelationInstruction $instruction)
     {
-        echo "Relation\n";
-
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
         $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
@@ -603,9 +577,7 @@ class Visitor
 
     // STRING MANIPULATION
     public function visitStringManipulationInstruction(StringManipulationInstruction $instruction)
-    {
-        echo "String manipulation\n";
-        
+    {        
         // TODO: check args are var or string
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
@@ -669,8 +641,6 @@ class Visitor
     // STRLEN
     public function visitStrlenInstruction(StrlenInstruction $instruction)
     {
-        echo "Strlen\n";
-
         // TODO: check arg is string
         $argType = $instruction->getArg2Type();
         $argValue = $instruction->getArg2Value();
@@ -687,8 +657,6 @@ class Visitor
     // TYPE
     public function visitTypeInstruction(TypeInstruction $instruction)
     {
-        echo "Type\n";
-
         $argType = $instruction->getArg2Type();
         $argValue = $instruction->getArg2Value();
 
@@ -749,8 +717,6 @@ class Visitor
     // READ
     public function visitReadInstruction(ReadInstruction $instruction)
     {
-        echo "Read\n";
-
         $argType = $instruction->getArg2Type();
         $argValue = $instruction->getArg2Value();
         $readType = $this->GetValueBasedOnType($argType, $argValue);
@@ -785,8 +751,6 @@ class Visitor
     // INT2CHAR
     public function visitInt2CharInstruction(Int2CharInstruction $instruction)
     {
-        echo "Int2Char\n";
-
         // TODO: check it's int
 
         $argType = $instruction->getArg2Type();
@@ -806,8 +770,6 @@ class Visitor
     // STR2INT
     public function visitStr2IntInstruction(Str2IntInstruction $instruction)
     {
-        echo "Str2Int\n";
-
         // TODO: check it's string and check arg types
         
         // get char from position, convert and save
@@ -841,19 +803,13 @@ class Visitor
     // FRAME
     public function visitFrameInstruction(FrameInstruction $instruction)
     {
-        echo "Frame ";
-
         switch ($instruction->getOpcode())
         {
             case OperationCodeEnum::CREATEFRAME:
-                echo "of type CREATEFRAME\n";
-
                 $this->temporaryFrame = new VarLinkedList;
                 break;
 
             case OperationCodeEnum::PUSHFRAME:
-                echo "of type PUSHFRAME\n";
-
                 // error checking: no TF defined
                 if ($this->temporaryFrame == null)
                 {
@@ -865,8 +821,6 @@ class Visitor
                 break;
 
             case OperationCodeEnum::POPFRAME:
-                echo "of type POPFRAME\n";
-
                 // error checking: no LF available
                 if (end($this->localFrames) == false)
                 {
@@ -884,7 +838,6 @@ class Visitor
     // PLACEHOLDER
     public function visitPlaceholderInstruction(PlaceholderInstruction $instruction)
     {
-        echo "Placeholder\n";
     }
 
     // ===========================================
@@ -893,7 +846,7 @@ class Visitor
 
     public function PrintGF()
     {
-        echo "Current Global Frame\n------------------\n";
+        echo "\nCurrent Global Frame\n------------------\n";
         $currentVar = $this->globalFrame->getHead();
         while ($currentVar != null)
         {
