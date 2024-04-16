@@ -507,6 +507,10 @@ class Visitor
             {
                 return ($value1 == $value2);
             }
+            else
+            {
+                throw new Exception("Unrecognized opcode for relation instruction.", 52);
+            }
         }
         else if (gettype($value1) == "boolean" && gettype($value2) == "boolean")
         {
@@ -536,6 +540,10 @@ class Visitor
             {
                 return ($value1 == $value2);
             }
+            else
+            {
+                throw new Exception("Unrecognized opcode for relation instruction.", 52);
+            }
         }
         else if (gettype($value1) == "string" && gettype($value2) == "string")
         {
@@ -551,6 +559,10 @@ class Visitor
             else if ($type == OperationCodeEnum::EQ)
             {
                 return ($strcmpValue == 0);
+            }
+            else
+            {
+                throw new Exception("Unrecognized opcode for relation instruction.", 52);
             }
         }
         else
