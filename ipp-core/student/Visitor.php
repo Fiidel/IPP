@@ -57,23 +57,50 @@ class Visitor
 
         if ($frame == "GF")
         {
-            $varInGF = $this->globalFrame->GetVarWithIdentifier($identifier);
-            if ($varInGF == null)
+            return $this->RetrieveVarFromFrame($identifier, $this->globalFrame, $frame);
+        }
+        else if ($frame == "TF")
+        {
+            // check TF exists
+            if ($this->temporaryFrame == null)
             {
-                // TODO: remove echo (or print it to stderr, idk)
-                echo "var $variable not declared in GF\n";
-                exit(54);
+                exit(55);
             }
-            else
+
+            return $this->RetrieveVarFromFrame($identifier, $this->temporaryFrame, $frame);
+        }
+        else if ($frame == "LF")
+        {
+            // get latest LF
+            $localFrame = end($this->localFrames);
+
+            // check LF exists
+            if ($localFrame == false)
             {
-                return $varInGF;
+                exit(55);
             }
+
+            return $this->RetrieveVarFromFrame($identifier, $localFrame, $frame);
         }
         else
         {
             return null;
         }
-        // TODO: other frames
+    }
+
+    private function RetrieveVarFromFrame($identifier, $frameList, $frameName)
+    {
+        $var = $frameList->GetVarWithIdentifier($identifier);
+        if ($var == null)
+        {
+            // TODO: remove echo (or print it to stderr, idk)
+            echo "var $identifier not declared in $frameName\n";
+            exit(54);
+        }
+        else
+        {
+            return $var;
+        }
     }
 
     private function GetValueBasedOnType(ArgTypeEnum $argType, string $argValue)
