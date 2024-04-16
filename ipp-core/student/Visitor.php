@@ -228,6 +228,25 @@ class Visitor
         throw new Exception("Invalid operand type. Expecting boolean constant or variable with a boolean value.", 53);
     }
 
+    private function AssertStringOrStringVar(ArgTypeEnum $argType, $argValue)
+    {
+        if ($argType == ArgTypeEnum::string)
+        {
+            return true;
+        }
+        
+        if ($argType == ArgTypeEnum::var)
+        {
+            $this->AssertVarValueIsNotNull($argValue);
+            if (gettype($argValue) == "string")
+            {
+                return true;
+            }
+        }
+
+        throw new Exception("Invalid operand type. Expecting string constant or variable with a string value.", 53);
+    }
+
     private function AssertSameTypeOrNil(ArgTypeEnum $argType1, $argValue1, ArgTypeEnum $argType2, $argValue2)
     {
         if (($argType1 == $argType2)
@@ -391,7 +410,6 @@ class Visitor
     // CONDITIONAL JUMP
     public function visitConditionalJumpInstruction(ConditionalJumpInstruction $instruction) : bool
     {
-        // TODO: check args are of the same type or nil
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
         $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
@@ -660,7 +678,6 @@ class Visitor
     // STRING MANIPULATION
     public function visitStringManipulationInstruction(StringManipulationInstruction $instruction)
     {
-        // TODO: check args are var or string
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
         $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
@@ -668,6 +685,10 @@ class Visitor
         $argType2 = $instruction->getArg3Type();
         $argValue2 = $instruction->getArg3Value();
         $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
+
+        // error checking - operands must be string
+        $this->AssertStringOrStringVar($argType1, $value1);
+        $this->AssertStringOrStringVar($argType2, $value2);
 
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
 
@@ -723,10 +744,12 @@ class Visitor
     // STRLEN
     public function visitStrlenInstruction(StrlenInstruction $instruction)
     {
-        // TODO: check arg is string
         $argType = $instruction->getArg2Type();
         $argValue = $instruction->getArg2Value();
         $value = $this->GetValueBasedOnType($argType, $argValue);
+
+        // error checking - operand must be string
+        $this->AssertStringOrStringVar($argType, $value);
 
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
 
@@ -833,11 +856,12 @@ class Visitor
     // INT2CHAR
     public function visitInt2CharInstruction(Int2CharInstruction $instruction)
     {
-        // TODO: check it's int
-
         $argType = $instruction->getArg2Type();
         $argValue = $instruction->getArg2Value();
         $intValue = $this->GetValueBasedOnType($argType, $argValue);
+
+        // error checking - operand must be int
+        $this->AssertIntOrIntVar($argType, $intValue);
 
         $char = mb_chr($intValue, "UTF-8");
         if ($char == false)
@@ -851,10 +875,7 @@ class Visitor
 
     // STR2INT
     public function visitStr2IntInstruction(Str2IntInstruction $instruction)
-    {
-        // TODO: check it's string and check arg types
-        
-        // get char from position, convert and save
+    {        
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
         $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
@@ -862,6 +883,10 @@ class Visitor
         $argType2 = $instruction->getArg3Type();
         $argValue2 = $instruction->getArg3Value();
         $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
+
+        // error checking - first operand must be string, second int
+        $this->AssertStringOrStringVar($argType1, $value2);
+        $this->AssertIntOrIntVar($argType2, $value2);
 
         // necessary to convert to ASCII, otherwise escape sequences will create an offset
         $string = $this->Escape2ASCII($value1);
