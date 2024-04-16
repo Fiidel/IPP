@@ -171,6 +171,21 @@ class Visitor
         return $value;
     }
 
+    private function DeclareVariable($identifier, $frameList, $frameName)
+    {
+        $isDeclared = $frameList->GetVarWithIdentifier($identifier);
+        if ($isDeclared == null)
+        {
+            $frameList->InsertLast($identifier);
+        }
+        else
+        {
+            // TODO: remove echo (or print it to stderr, idk)
+            echo "var $identifier already declared in $frameName\n";
+            exit(52);
+        }
+    }
+
     // ===========================================
     // INSTRUCTION EXECUTION
     // ===========================================
@@ -179,24 +194,37 @@ class Visitor
     public function visitDefvarInstruction(DefvarInstruction $instruction)
     {
         echo "Defvar\n";
-        
-        $value = preg_filter("/GF@/", "", $instruction->GetArg1Value());
-        if ($value != null)
-        {
-            $isDeclared = $this->globalFrame->GetVarWithIdentifier($value);
-            if ($isDeclared == null)
-            {
-                $this->globalFrame->InsertLast($value);
-            }
-            else
-            {
-                // TODO: remove echo (or print it to stderr, idk)
-                echo "var $value already declared in GF\n";
-                exit(52);
-            }
-        }
 
-        // TODO: other frames
+        $frame = preg_filter("/@(.*)$/", "", $instruction->GetArg1Value());
+        $identifier = preg_filter("/^(.*)@/", "", $instruction->GetArg1Value());
+        
+        if ($frame == "GF")
+        {
+            $this->DeclareVariable($identifier, $this->globalFrame, $frame);
+        }
+        else if ($frame == "TF")
+        {
+            // check TF exists
+            if ($this->temporaryFrame == null)
+            {
+                exit(55);
+            }
+
+            $this->DeclareVariable($identifier, $this->temporaryFrame, $frame);
+        }
+        else if ($frame == "LF")
+        {
+            // get latest LF
+            $localFrame = end($this->localFrames);
+
+            // check LF exists
+            if ($localFrame == false)
+            {
+                exit(55);
+            }
+
+            $this->DeclareVariable($identifier, $localFrame, $frame);
+        }
     }
 
     // MOVE
