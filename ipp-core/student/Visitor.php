@@ -237,7 +237,6 @@ class Visitor
         
         if ($argType == ArgTypeEnum::var)
         {
-            $this->AssertVarValueIsNotNull($argValue);
             if (gettype($argValue) == "string")
             {
                 return true;
