@@ -694,19 +694,23 @@ class Visitor
         $argValue2 = $instruction->getArg3Value();
         $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
 
-        // error checking - operands must be string
-        $this->AssertStringOrStringVar($argType1, $value1);
-        $this->AssertStringOrStringVar($argType2, $value2);
-
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
 
         switch ($instruction->getOpcode())
         {
             case OperationCodeEnum::CONCAT:
+                // error checking - operands must be string
+                $this->AssertStringOrStringVar($argType1, $value1);
+                $this->AssertStringOrStringVar($argType2, $value2);
+
                 $result = $value1 . $value2;
                 break;
             
             case OperationCodeEnum::GETCHAR:
+                // error checking - operands must be string and int (respectively)
+                $this->AssertStringOrStringVar($argType1, $value1);
+                $this->AssertIntOrIntVar($argType2, $value2);
+
                 // necessary to convert to ASCII, otherwise escape sequences will create an offset
                 $string = $this->Escape2ASCII($value1);
                 $index = $value2;
@@ -722,6 +726,11 @@ class Visitor
                 break;
 
             case OperationCodeEnum::SETCHAR:
+                // error checking - operands must be string, int and string (respectively)
+                $this->AssertStringOrStringVar(ArgTypeEnum::var, $var->getValue());
+                $this->AssertIntOrIntVar($argType1, $value1);
+                $this->AssertStringOrStringVar($argType2, $value2);
+
                 // necessary to convert to ASCII, otherwise escape sequences will create an offset
                 $string = $this->Escape2ASCII((string) $var->getValue());
                 $index = $value1;
