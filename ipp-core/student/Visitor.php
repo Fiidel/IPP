@@ -119,7 +119,6 @@ class Visitor
             {
                 case ArgTypeEnum::string:
                     $value = $argValue;
-                    // TODO: convert unicode sequences to chars in string
                     break;
                 
                 case ArgTypeEnum::int:
@@ -183,6 +182,68 @@ class Visitor
         }
     }
 
+    private function AssertVarValueIsNotNull($value)
+    {
+        if ($value == null)
+        {
+            throw new Exception("The value of a var operand is null. Expected not null.", 56);
+        }
+    }
+
+    private function AssertIntOrIntVar(ArgTypeEnum $argType, $argValue)
+    {
+        if ($argType == ArgTypeEnum::int)
+        {
+            return true;
+        }
+        
+        if ($argType == ArgTypeEnum::var)
+        {
+            $this->AssertVarValueIsNotNull($argValue);
+            if (gettype($argValue) == "integer")
+            {
+                return true;
+            }
+        }
+
+        throw new Exception("Invalid operand type. Expecting integer constant or variable with an integer value.", 53);
+    }
+
+    private function AssertBoolOrBoolVar(ArgTypeEnum $argType, $argValue)
+    {
+        if ($argType == ArgTypeEnum::bool)
+        {
+            return true;
+        }
+        
+        if ($argType == ArgTypeEnum::var)
+        {
+            $this->AssertVarValueIsNotNull($argValue);
+            if (gettype($argValue) == "boolean")
+            {
+                return true;
+            }
+        }
+
+        throw new Exception("Invalid operand type. Expecting boolean constant or variable with a boolean value.", 53);
+    }
+
+    private function AssertSameTypeOrNil(ArgTypeEnum $argType1, $argValue1, ArgTypeEnum $argType2, $argValue2)
+    {
+        if (($argType1 == $argType2)
+            || ($argType1 == ArgTypeEnum::nil)
+            || ($argType2 == ArgTypeEnum::nil)
+            || ($argValue1 == null)
+            || ($argValue2 == null))
+        {
+            return true;
+        }
+        else
+        {
+            throw new Exception("Expected operands of same type or nil.", 53);
+        }
+    }
+
     // ===========================================
     // INSTRUCTION EXECUTION
     // ===========================================
@@ -226,7 +287,6 @@ class Visitor
     public function visitMoveInstruction(MoveInstruction $instruction)
     {
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
-        // GetDeclaredVariable() exits if the given var isn't declared, otherwise a null check would be necessary here
         
         $argType = $instruction->getArg2Type();
         $argValue = $instruction->getArg2Value();
@@ -240,9 +300,7 @@ class Visitor
     public function visitArithmeticInstruction(ArithmeticInstruction $instruction)
     {        
         $var = $this->GetDeclaredVariable($instruction->GetArg1Value());
-        // GetDeclaredVariable() exits if the given var isn't declared, otherwise a null check would be necessary here
         
-        // TODO: check args are var or int
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
         $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
@@ -250,6 +308,10 @@ class Visitor
         $argType2 = $instruction->getArg3Type();
         $argValue2 = $instruction->getArg3Value();
         $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
+
+        // operand type check
+        $this->AssertIntOrIntVar($argType1, $value1);
+        $this->AssertIntOrIntVar($argType2, $value2);
 
         switch ($instruction->getOpcode())
         {
@@ -338,6 +400,9 @@ class Visitor
         $argValue2 = $instruction->getArg3Value();
         $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
 
+        // error check - operands must be of the same type or nil
+        $this->AssertSameTypeOrNil($argType1, $value1, $argType2, $value2);
+
         switch ($instruction->getOpcode())
         {
             case OperationCodeEnum::JUMPIFEQ:
@@ -391,7 +456,6 @@ class Visitor
     // AND
     public function visitAndInstruction(AndInstruction $instruction)
     {
-        // TODO: check args types
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
         $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
@@ -400,8 +464,11 @@ class Visitor
         $argValue2 = $instruction->getArg3Value();
         $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
 
-        $var = $this->GetDeclaredVariable($instruction->getArg1Value());
+        // error check - operands are bool
+        $this->AssertBoolOrBoolVar($argType1, $value1);
+        $this->AssertBoolOrBoolVar($argType2, $value2);
 
+        $var = $this->GetDeclaredVariable($instruction->getArg1Value());
         if ($value1 && $value2)
         {
             $var->setValue(true);
@@ -415,7 +482,6 @@ class Visitor
     // OR
     public function visitOrInstruction(OrInstruction $instruction)
     {
-        // TODO: check args types
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
         $value1 = $this->GetValueBasedOnType($argType1, $argValue1);
@@ -424,8 +490,11 @@ class Visitor
         $argValue2 = $instruction->getArg3Value();
         $value2 = $this->GetValueBasedOnType($argType2, $argValue2);
 
-        $var = $this->GetDeclaredVariable($instruction->getArg1Value());
+        // error check - operands are bool
+        $this->AssertBoolOrBoolVar($argType1, $value1);
+        $this->AssertBoolOrBoolVar($argType2, $value2);
 
+        $var = $this->GetDeclaredVariable($instruction->getArg1Value());
         if ($value1 || $value2)
         {
             $var->setValue(true);
@@ -439,13 +508,14 @@ class Visitor
     // NOT
     public function visitNotInstruction(NotInstruction $instruction)
     {
-        // TODO: check args type
         $argType = $instruction->getArg2Type();
         $argValue = $instruction->getArg2Value();
         $value = $this->GetValueBasedOnType($argType, $argValue);
 
+        // error check - operands are bool
+        $this->AssertBoolOrBoolVar($argType, $value);
+        
         $var = $this->GetDeclaredVariable($instruction->getArg1Value());
-
         if ($value)
         {
             $var->setValue(false);
@@ -589,7 +659,7 @@ class Visitor
 
     // STRING MANIPULATION
     public function visitStringManipulationInstruction(StringManipulationInstruction $instruction)
-    {        
+    {
         // TODO: check args are var or string
         $argType1 = $instruction->getArg2Type();
         $argValue1 = $instruction->getArg2Value();
