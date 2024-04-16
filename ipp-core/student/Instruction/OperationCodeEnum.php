@@ -35,5 +35,4 @@ enum OperationCodeEnum
     case POPFRAME;
 
     case PLACEHOLDER;
-    // TODO: a lot of missing opcodes
 }

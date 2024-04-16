@@ -163,9 +163,6 @@ abstract class InstructionFactoryBase
                 return OperationCodeEnum::POPFRAME;
                 break;
 
-
-            // TODO: the rest of the cases
-
             default:
                 break;
         }
